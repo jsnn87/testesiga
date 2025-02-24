@@ -353,6 +353,7 @@
             padding: 20px;
             border-radius: 10px;
             width: 70%;
+            /* Ocupa 70% da tela */
             max-width: 800px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             position: relative;
@@ -375,6 +376,7 @@
 
         .modal-body {
             font-size: 18px;
+            /* Tamanho do texto proporcional ao modal */
             line-height: 1.6;
         }
 
@@ -446,8 +448,7 @@
             border-collapse: collapse;
             table-layout: fixed;
             flex: 1;
-            margin: 0 auto;
-            overflow-x: auto;
+            margin: 0 auto; /* Centraliza a tabela */
         }
 
         /* Cabeçalho maior */
@@ -459,8 +460,8 @@
             top: 0;
             z-index: 1;
             white-space: nowrap;
-            height: 60px;
-            font-size: 20px;
+            height: 60px; /* Altura maior para o cabeçalho */
+            font-size: 20px; /* Tamanho maior para o texto do cabeçalho */
             padding: 15px;
             text-align: center;
             vertical-align: middle;
@@ -472,10 +473,10 @@
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: middle;
-            height: 65px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            height: 65px; /* Altura fixa para todas as linhas */
+            white-space: nowrap; /* Evita a quebra de linha */
+            overflow: hidden; /* Esconde o conteúdo que ultrapassa */
+            text-overflow: ellipsis; /* Adiciona "..." ao texto que ultrapassa */
         }
 
         .data-table tr:nth-child(even) {
@@ -549,7 +550,7 @@
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             background-color: #ffffff;
-            overflow: hidden;
+            overflow: hidden; /* Remove a barra de rolagem */
         }
 
         #viewModal .modal-header {
@@ -578,7 +579,7 @@
         #viewModal .modal-body {
             display: flex;
             gap: 20px;
-            height: calc(100% - 60px);
+            height: calc(100% - 60px); /* Ajusta a altura para ocupar o espaço disponível */
         }
 
         #viewModal .left-column-modal {
@@ -609,29 +610,22 @@
         }
 
         #viewModal .info-box.como-box {
-            flex: 1;
+            flex: 1; /* Expande para ocupar todo o espaço vertical */
             display: flex;
             flex-direction: column;
         }
 
         #viewModal .info-box.como-box p {
-            flex: 1;
-            overflow: hidden;
+            flex: 1; /* Expande o parágrafo para ocupar o espaço restante */
+            overflow: hidden; /* Remove a barra de rolagem */
         }
 
-        /* Estilos para paginação e filtro */
-        .pagination-and-filter {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            gap: 20px;
-        }
-
+        /* Estilos para paginação */
         .pagination {
             display: flex;
+            justify-content: center;
+            margin-top: 20px;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         .pagination button {
@@ -654,167 +648,35 @@
             background-color: #ddd;
         }
 
-        #filtro-quando {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #filtro-quando label {
-            font-weight: bold;
-        }
-
-        #filtro-quando input[type="date"] {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .data-table {
-                font-size: 14px;
+        /* Animação de transição da tabela */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
             }
-
-            .data-table th,
-            .data-table td {
-                padding: 8px;
-            }
-
-            .pagination button {
-                padding: 6px 10px;
-                font-size: 12px;
-            }
-
-            #filtro-quando {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            #filtro-quando label {
-                margin-bottom: 5px;
-            }
-
-            .modal-content {
-                width: 90%;
-                margin: 10% auto;
-                padding: 15px;
-            }
-
-            .modal-header h2 {
-                font-size: 20px;
-            }
-
-            .modal-body {
-                font-size: 16px;
-            }
-
-            .form-group input[type="text"],
-            .form-group textarea,
-            .form-group input[type="date"] {
-                font-size: 12px;
-            }
-
-            .save-button {
-                font-size: 14px;
-                padding: 8px 16px;
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
 
-        /* Responsividade para Smart TVs */
-        @media (min-width: 1921px) {
-            body {
-                font-size: 24px; /* Aumenta o tamanho da fonte para telas grandes */
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
             }
-
-            .data-table th,
-            .data-table td {
-                font-size: 24px; /* Aumenta o tamanho da fonte da tabela */
-                padding: 20px; /* Aumenta o padding da tabela */
-            }
-
-            .pagination button {
-                font-size: 20px; /* Aumenta o tamanho da fonte da paginação */
-                padding: 12px 20px; /* Aumenta o padding dos botões */
-            }
-
-            #filtro-quando label,
-            #filtro-quando input[type="date"] {
-                font-size: 20px; /* Aumenta o tamanho da fonte do filtro */
-            }
-
-            .modal-content {
-                width: 60%; /* Aumenta a largura do modal */
-                max-width: 1200px; /* Define um máximo para o modal */
-            }
-
-            .modal-header h2 {
-                font-size: 32px; /* Aumenta o tamanho da fonte do cabeçalho do modal */
-            }
-
-            .modal-body {
-                font-size: 24px; /* Aumenta o tamanho da fonte do corpo do modal */
-            }
-
-            .form-group input[type="text"],
-            .form-group textarea,
-            .form-group input[type="date"] {
-                font-size: 20px; /* Aumenta o tamanho da fonte dos inputs */
-                padding: 15px; /* Aumenta o padding dos inputs */
-            }
-
-            .save-button {
-                font-size: 24px; /* Aumenta o tamanho da fonte do botão */
-                padding: 15px 30px; /* Aumenta o padding do botão */
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
 
-        @media (min-width: 3840px) {
-            body {
-                font-size: 32px; /* Aumenta ainda mais o tamanho da fonte para telas 4K */
-            }
+        .slide-right {
+            animation: slideInRight 0.5s ease-out;
+        }
 
-            .data-table th,
-            .data-table td {
-                font-size: 32px; /* Aumenta o tamanho da fonte da tabela */
-                padding: 30px; /* Aumenta o padding da tabela */
-            }
-
-            .pagination button {
-                font-size: 28px; /* Aumenta o tamanho da fonte da paginação */
-                padding: 16px 28px; /* Aumenta o padding dos botões */
-            }
-
-            #filtro-quando label,
-            #filtro-quando input[type="date"] {
-                font-size: 28px; /* Aumenta o tamanho da fonte do filtro */
-            }
-
-            .modal-content {
-                width: 50%; /* Aumenta a largura do modal */
-                max-width: 1600px; /* Define um máximo para o modal */
-            }
-
-            .modal-header h2 {
-                font-size: 40px; /* Aumenta o tamanho da fonte do cabeçalho do modal */
-            }
-
-            .modal-body {
-                font-size: 32px; /* Aumenta o tamanho da fonte do corpo do modal */
-            }
-
-            .form-group input[type="text"],
-            .form-group textarea,
-            .form-group input[type="date"] {
-                font-size: 28px; /* Aumenta o tamanho da fonte dos inputs */
-                padding: 20px; /* Aumenta o padding dos inputs */
-            }
-
-            .save-button {
-                font-size: 32px; /* Aumenta o tamanho da fonte do botão */
-                padding: 20px 40px; /* Aumenta o padding do botão */
-            }
+        .slide-left {
+            animation: slideInLeft 0.5s ease-out;
         }
     </style>
 </head>
@@ -881,17 +743,8 @@
             <!-- Container da tabela -->
             <div id="plano-de-acao-container"></div>
 
-            <!-- Paginação e Filtro -->
-            <div class="pagination-and-filter">
-                <!-- Pagination -->
-                <div class="pagination" id="pagination"></div>
-
-                <!-- Filtro de data -->
-                <div id="filtro-quando">
-                    <label for="filtroData">Filtrar por data (Quando):</label>
-                    <input type="date" id="filtroData" onchange="filtrarPorData(this.value)">
-                </div>
-            </div>
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
 
             <!-- Sidebar -->
             <div class="registro-sidebar">
@@ -1290,14 +1143,6 @@
             // Aqui você pode adicionar a lógica para salvar a edição
             console.log("Dados editados:", formData);
             closeEditModal();
-        }
-
-        // Função para filtrar os dados pela data
-        function filtrarPorData(data) {
-            const filteredRows = allRows.filter(row => row[4] === data);
-            allRows = filteredRows.length > 0 ? filteredRows : allRows;
-            renderTable(currentPage);
-            updatePagination();
         }
 
         // Adiciona o evento de carregamento da página
