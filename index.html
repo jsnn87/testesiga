@@ -203,7 +203,7 @@
             margin-bottom: 20px;
         }
 
-        /* Container da página Registro */
+        /* Container da página Ação */
         .registro-container {
             display: flex;
             flex-direction: column;
@@ -217,111 +217,7 @@
             overflow: hidden;
         }
 
-        /* Container da tabela */
-        #plano-de-acao-container {
-            width: 100%;
-            height: 800px; /* Aumentado para 500px */
-            overflow: auto; /* Adicionado para permitir rolagem */
-            margin-bottom: 0;
-        }
-
-        /* Estilos da tabela */
-        .data-table {
-            width: 100%;
-            max-width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            font-size: 18px; /* Tamanho da fonte aumentado */
-            color: #333;
-        }
-
-        /* Cabeçalho */
-        .data-table th {
-            background-color: crimson;
-            color: white;
-            font-weight: bold;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            height: 35px;
-            font-size: 20px;
-            padding: 12px; /* Aumentado para mais espaço interno */
-            text-align: center;
-            vertical-align: middle;
-            border-bottom: 2px solid #fff;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Linhas */
-        .data-table td {
-            padding: 12px; /* Aumentado para mais espaço interno */
-            border: 1px solid #ccc;
-            text-align: center;
-            vertical-align: middle;
-            height: 40px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Alternância de cores */
-        .data-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        /* Efeito de foco para navegação com controle remoto */
-        .data-table tr:focus-within,
-        .data-table tr:hover {
-            background-color: #e0e0e0;
-            outline: 3px solid #007bff;
-        }
-
-        /* Coluna de ações */
-        .action-column {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-            align-items: center;
-            height: 40px;
-            border: 1px solid #ccc;
-            overflow: hidden;
-        }
-
-        .action-column i {
-            font-size: 18px;
-            padding: 4px;
-        }
-
-        .action-column i:focus {
-            outline: 3px solid #007bff;
-            background-color: rgba(0, 123, 255, 0.2);
-            border-radius: 5px;
-        }
-
-        .action-column i.fa-check { color: green; }
-        .action-column i.fa-edit { color: orange; }
-        .action-column i.fa-trash { color: red; }
-        .action-column i.fa-eye { color: #007bff; }
-
-        /* Ajustes para resoluções de TV (Full HD e acima) */
-        @media (min-width: 1280px) {
-            .data-table { font-size: 20px; }
-            .data-table th { font-size: 22px; padding: 8px; height: 40px; }
-            .data-table td { padding: 8px; height: 45px; }
-            .action-column i { font-size: 20px; }
-        }
-
-        /* Para 4K */
-        @media (min-width: 2560px) {
-            .data-table { font-size: 22px; }
-            .data-table th { font-size: 24px; padding: 10px; height: 45px; }
-            .data-table td { padding: 10px; height: 50px; }
-            .action-column i { font-size: 22px; }
-        }
-
-        /* Sidebar dentro do container Registro */
+        /* Sidebar dentro do container Ação */
         .registro-sidebar {
             position: absolute;
             top: 0;
@@ -357,6 +253,7 @@
             border-radius: 0 !important;
         }
 
+        /* Estado selecionado no sidebar */
         .registro-sidebar ul li.selecionado {
             background-color: #333 !important;
         }
@@ -365,6 +262,15 @@
             color: white !important;
         }
 
+        /* Estilos para os logos das marcas */
+        .registro-sidebar ul li img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            transition: opacity 0.4s ease-out;
+        }
+
+        /* Arredondar bordas específicas */
         .registro-sidebar ul li:first-child {
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
@@ -375,6 +281,12 @@
             border-bottom-right-radius: 10px;
         }
 
+        /* Esconde o logo ao passar o mouse */
+        .registro-sidebar ul li:hover img {
+            opacity: 0;
+        }
+
+        /* Remove estilos desnecessários */
         .registro-sidebar ul li:after {
             position: absolute;
             background: white;
@@ -393,6 +305,7 @@
             font-weight: bold;
         }
 
+        /* Texto do segundo sidebar */
         .registro-sidebar ul li:nth-child(1):after {
             content: "REGISTRAR";
         }
@@ -410,9 +323,15 @@
             transform: translateY(-100%);
         }
 
-        .registro-sidebar ul li i {
-            color: white;
-            font-size: 30px;
+        /* Fixar o título da tabela */
+        .fixed-title {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 1;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
         }
 
         /* Modal */
@@ -430,11 +349,12 @@
 
         .modal-content {
             background-color: white;
-            margin: 10% auto;
-            padding: 15px;
+            margin: 5% auto;
+            padding: 20px;
             border-radius: 10px;
-            width: 50%;
-            max-width: 500px;
+            width: 70%;
+            /* Ocupa 70% da tela */
+            max-width: 800px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             position: relative;
         }
@@ -443,24 +363,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-bottom: 2px solid crimson;
-            padding-bottom: 8px;
+            padding-bottom: 10px;
         }
 
         .modal-header h2 {
-            font-size: 20px;
+            font-size: 24px;
             color: crimson;
             margin: 0;
         }
 
         .modal-body {
-            font-size: 16px;
-            line-height: 1.5;
+            font-size: 18px;
+            /* Tamanho do texto proporcional ao modal */
+            line-height: 1.6;
         }
 
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
@@ -472,7 +393,7 @@
         }
 
         .form-group label i {
-            margin-right: 8px;
+            margin-right: 10px;
             color: crimson;
         }
 
@@ -480,10 +401,10 @@
         .form-group textarea,
         .form-group input[type="date"] {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 12px;
+            font-size: 14px;
             transition: border-color 0.3s ease;
         }
 
@@ -496,14 +417,14 @@
 
         .form-group textarea {
             resize: vertical;
-            height: 150px;
+            height: 300px;
         }
 
         .save-button {
             background-color: crimson;
             color: white;
-            font-size: 14px;
-            padding: 8px 16px;
+            font-size: 16px;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -515,13 +436,121 @@
             background-color: darkred;
         }
 
-        /* Estilos do Modal de Visualização */
+        /* Ícones do Sidebar dentro do container Registro */
+        .registro-sidebar ul li i {
+            color: white;
+            font-size: 30px;
+        }
+
+        /* Estilos da tabela */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            flex: 1;
+            margin: 0 auto; /* Centraliza a tabela */
+        }
+
+        /* Cabeçalho maior */
+        .data-table th {
+            background-color: crimson;
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            white-space: nowrap;
+            height: 60px; /* Altura maior para o cabeçalho */
+            font-size: 20px; /* Tamanho maior para o texto do cabeçalho */
+            padding: 15px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Linhas uniformes */
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            vertical-align: middle;
+            height: 65px; /* Altura fixa para todas as linhas */
+            white-space: nowrap; /* Evita a quebra de linha */
+            overflow: hidden; /* Esconde o conteúdo que ultrapassa */
+            text-overflow: ellipsis; /* Adiciona "..." ao texto que ultrapassa */
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .data-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Coluna de ações */
+        .action-column {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            border: 1px solid #ccc;
+        }
+
+        .action-column i {
+            cursor: pointer;
+            font-size: 20px;
+            position: relative;
+        }
+
+        .action-column i::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .action-column i:hover::after {
+            opacity: 1;
+        }
+
+        .action-column i.fa-check {
+            color: green;
+        }
+
+        .action-column i.fa-edit {
+            color: orange;
+        }
+
+        .action-column i.fa-trash {
+            color: red;
+        }
+
+        .action-column i.fa-eye {
+            color: #007bff;
+        }
+
+        /* Aumentar o tamanho do modal de visualização */
         #viewModal .modal-content {
-            width: 95%;
+            width: 100%;
+            height: 80%;
             max-width: 1400px;
             margin: 5% auto;
             padding: 30px;
             border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background-color: #ffffff;
+            overflow: hidden; /* Remove a barra de rolagem */
         }
 
         #viewModal .modal-header {
@@ -546,10 +575,11 @@
             font-size: 28px;
         }
 
+        /* Novo layout para o modal de visualização */
         #viewModal .modal-body {
             display: flex;
             gap: 20px;
-            height: calc(100% - 60px);
+            height: calc(100% - 60px); /* Ajusta a altura para ocupar o espaço disponível */
         }
 
         #viewModal .left-column-modal {
@@ -569,26 +599,33 @@
             background-color: #f9f9f9;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
-            padding: 15px;
+            padding: 24px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #viewModal .info-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         #viewModal .info-box.como-box {
-            flex: 1;
+            flex: 1; /* Expande para ocupar todo o espaço vertical */
             display: flex;
             flex-direction: column;
         }
 
-        #viewModal .info-box p {
-            margin: 0;
+        #viewModal .info-box.como-box p {
+            flex: 1; /* Expande o parágrafo para ocupar o espaço restante */
+            overflow: hidden; /* Remove a barra de rolagem */
         }
 
-        /* Paginação */
+        /* Estilos para paginação */
         .pagination {
             display: flex;
-            justify-content: center;
-            margin-top: 20px; /* Aumentado para 80px */
-            gap: 1px;
+            justify-content: flex-end; /* Alinha a paginação à direita */
+            margin-bottom: 20px; /* Adiciona espaço abaixo da paginação */
+            gap: 10px;
         }
 
         .pagination button {
@@ -613,13 +650,25 @@
 
         /* Animação de transição da tabela */
         @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @keyframes slideInLeft {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .slide-right {
@@ -691,11 +740,11 @@
         <div class="registro-container">
             <h2 class="fixed-title">Plano de Ação</h2>
 
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+
             <!-- Container da tabela -->
             <div id="plano-de-acao-container"></div>
-
-            <!-- Paginação -->
-            <div class="pagination" id="pagination"></div>
 
             <!-- Sidebar -->
             <div class="registro-sidebar">
@@ -750,7 +799,8 @@
                 </div>
                 <div class="form-group">
                     <label for="editComo"><i class="fas fa-tasks"></i> Como?</label>
-                    <textarea id="editComo" name="editComo" placeholder="Explique como será feito..." required></textarea>
+                    <textarea id="editComo" name="editComo" placeholder="Explique como será feito..."
+                        required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="editQuem"><i class="fas fa-user"></i> Quem?</label>
@@ -799,11 +849,11 @@
         </div>
     </div>
     <script>
-        let allRows = [];
-        let tableHeaders = [];
+        let allRows = []; // Armazena todas as linhas da tabela
+        let tableHeaders = []; // Armazena os cabeçalhos da tabela
         let currentPage = 1;
         const rowsPerPage = 10;
-        const maxVisiblePages = 5;
+        const maxVisiblePages = 5; // Número máximo de páginas visíveis na paginação
 
         function showPage(page) {
             var sections = document.querySelectorAll('.page');
@@ -830,9 +880,15 @@
 
         function closeModal() {
             modal.style.display = "none";
+
+            // Seleciona o bloco "REGISTRAR" no sidebar interno
             const registrarBlock = document.getElementById('filtroREGISTAR');
+
+            // Muda a cor de fundo do bloco para vermelho (crimson)
             if (registrarBlock) {
                 registrarBlock.style.backgroundColor = 'crimson';
+
+                // Seleciona o ícone dentro do bloco e muda a cor para branco
                 const icon = registrarBlock.querySelector('i');
                 if (icon) {
                     icon.style.color = 'white';
@@ -875,7 +931,7 @@
             }).then(response => {
                 console.log('Success:', response);
                 closeModal();
-                fetchDataAndRenderTable();
+                fetchDataAndRenderTable(); // Atualiza a tabela após salvar
             }).catch(error => {
                 console.error('Error:', error);
             });
@@ -888,45 +944,38 @@
                 .then(response => response.json())
                 .then(data => {
                     const { headers, rows } = data;
-                    allRows = rows;
-                    tableHeaders = headers;
-                    renderTable(currentPage);
-                    updatePagination();
+                    allRows = rows; // Armazena todas as linhas
+                    tableHeaders = headers; // Armazena os cabeçalhos
+                    renderTable(currentPage); // Renderiza a tabela
+                    updatePagination(); // Atualiza a paginação
                 })
                 .catch(error => {
                     console.error("Erro ao buscar dados:", error);
                 });
         }
 
-        function formatDate(dateString) {
-            if (!dateString || isNaN(new Date(dateString))) {
-                return "Data inválida";
-            }
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = String(date.getFullYear()).slice(-2);
-            return `${day}/${month}/${year}`; // Formato: "dd/mm/yy"
-        }
-
         function renderTable(page) {
             const container = document.querySelector("#plano-de-acao-container");
+
+            // Limpa o container
             container.innerHTML = "";
 
+            // Cria a tabela
             const table = document.createElement("table");
             table.classList.add("data-table");
-            table.setAttribute("tabindex", "0");
 
-            // Cabeçalho da tabela
+            // Cria o cabeçalho da tabela
             const thead = document.createElement("thead");
             const headerRow = document.createElement("tr");
 
+            // Adiciona as colunas de A a F
             for (let i = 0; i < 6; i++) {
                 const th = document.createElement("th");
-                th.textContent = tableHeaders[i] || `Coluna ${String.fromCharCode(65 + i)}`;
+                th.textContent = tableHeaders[i] || `Coluna ${String.fromCharCode(65 + i)}`; // A, B, C, D, E, F
                 headerRow.appendChild(th);
             }
 
+            // Adiciona a coluna de ações ao cabeçalho
             const actionHeader = document.createElement("th");
             actionHeader.textContent = "Ações";
             headerRow.appendChild(actionHeader);
@@ -934,33 +983,30 @@
             thead.appendChild(headerRow);
             table.appendChild(thead);
 
-            // Corpo da tabela
+            // Cria o corpo da tabela
             const tbody = document.createElement("tbody");
 
             const startIndex = (page - 1) * rowsPerPage;
-            const endIndex = Math.min(startIndex + rowsPerPage, allRows.length);
+            const endIndex = startIndex + rowsPerPage;
 
             allRows.slice(startIndex, endIndex).forEach((row, index) => {
                 const tr = document.createElement("tr");
-                tr.setAttribute("tabindex", "0");
 
+                // Adiciona as colunas de A a F
                 for (let i = 0; i < 6; i++) {
                     const td = document.createElement("td");
-                    if (i === 4 || i === 5) { // Colunas de data
-                        td.textContent = formatDate(row[i]); // Formata as datas
-                    } else {
-                        td.textContent = row[i] || "";
-                    }
+                    td.textContent = row[i] || ""; // Exibe o valor da célula ou vazio se não existir
                     tr.appendChild(td);
                 }
 
+                // Adiciona a coluna de ações
                 const actionCell = document.createElement("td");
                 actionCell.classList.add("action-column");
                 actionCell.innerHTML = `
-                    <i class="fas fa-check" tabindex="0" data-tooltip="Concluir" onclick="markAsCompleted(${index})" onkeydown="if(event.key === 'Enter') markAsCompleted(${index})"></i>
-                    <i class="fas fa-edit" tabindex="0" data-tooltip="Editar" onclick="openEditModalWithData(${index})" onkeydown="if(event.key === 'Enter') openEditModalWithData(${index})"></i>
-                    <i class="fas fa-trash" tabindex="0" data-tooltip="Excluir" onclick="deleteRow(${index})" onkeydown="if(event.key === 'Enter') deleteRow(${index})"></i>
-                    <i class="fas fa-eye" tabindex="0" data-tooltip="Visualizar" onclick="viewRow(${index})" onkeydown="if(event.key === 'Enter') viewRow(${index})"></i>
+                    <i class="fas fa-check" data-tooltip="Concluir" onclick="markAsCompleted(${index})"></i>
+                    <i class="fas fa-edit" data-tooltip="Editar" onclick="openEditModalWithData(${index})"></i>
+                    <i class="fas fa-trash" data-tooltip="Excluir" onclick="deleteRow(${index})"></i>
+                    <i class="fas fa-eye" data-tooltip="Visualizar" onclick="viewRow(${index})"></i>
                 `;
                 tr.appendChild(actionCell);
 
@@ -984,8 +1030,8 @@
                     if (currentPage > 1) {
                         currentPage--;
                         renderTable(currentPage);
-                        animateTable('left');
                         updatePagination();
+                        animateTable('left'); // Animação para a esquerda
                     }
                 });
                 pagination.appendChild(prevButton);
@@ -998,10 +1044,8 @@
                     button.textContent = i;
                     if (i === currentPage) button.classList.add("active");
                     button.addEventListener("click", () => {
-                        const direction = i > currentPage ? 'right' : 'left';
                         currentPage = i;
                         renderTable(i);
-                        animateTable(direction);
                         updatePagination();
                     });
                     pagination.appendChild(button);
@@ -1013,14 +1057,15 @@
                     if (currentPage < totalPages) {
                         currentPage++;
                         renderTable(currentPage);
-                        animateTable('right');
                         updatePagination();
+                        animateTable('right'); // Animação para a direita
                     }
                 });
                 pagination.appendChild(nextButton);
             }
         }
 
+        // Função para animar a tabela
         function animateTable(direction) {
             const container = document.querySelector("#plano-de-acao-container");
             if (direction === 'right') {
@@ -1030,15 +1075,18 @@
                 container.classList.remove('slide-right');
                 container.classList.add('slide-left');
             }
+            // Remove a classe de animação após a animação terminar
             setTimeout(() => {
                 container.classList.remove('slide-right', 'slide-left');
-            }, 500);
+            }, 500); // Duração da animação
         }
 
+        // Função para marcar uma ação como concluída
         function markAsCompleted(index) {
             alert(`Ação ${index + 1} marcada como concluída.`);
         }
 
+        // Função para abrir o modal de edição com os dados da linha selecionada
         function openEditModalWithData(index) {
             const rowData = allRows[index];
             document.getElementById("editOQue").value = rowData[1];
@@ -1048,24 +1096,41 @@
             openEditModal();
         }
 
+        // Função para deletar uma linha
         function deleteRow(index) {
             if (confirm("Tem certeza que deseja deletar esta ação?")) {
                 allRows.splice(index, 1);
-                renderTable(currentPage);
-                updatePagination();
+                renderTable(currentPage); // Atualiza a tabela após deletar
+                updatePagination(); // Atualiza a paginação após deletar
             }
         }
 
+        // Função para visualizar uma linha (atualizada)
         function viewRow(index) {
             const rowData = allRows[index];
             document.getElementById("viewQuem").textContent = rowData[3];
             document.getElementById("viewOQue").textContent = rowData[1];
-            document.getElementById("viewDataRegistro").textContent = formatDate(new Date().toISOString().split('T')[0]);
-            document.getElementById("viewQuando").textContent = formatDate(rowData[4]);
+            document.getElementById("viewDataRegistro").textContent = formatDate(new Date().toISOString().split('T')[0]); // Formata a data atual
+            document.getElementById("viewQuando").textContent = formatDate(rowData[4]); // Formata a data da linha
             document.getElementById("viewComo").textContent = rowData[2];
             openViewModal();
         }
 
+        // Função para formatar a data no formato DD/MM/YY
+        function formatDate(dateString) {
+            // Verifica se a data é válida
+            if (!dateString || isNaN(new Date(dateString))) {
+                return "Data inválida"; // Retorna uma mensagem de erro ou um valor padrão
+            }
+
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear()).slice(-2);
+            return `${day}/${month}/${year}`;
+        }
+
+        // Função para salvar a edição da ação
         function submitEditAction() {
             const editActionForm = document.getElementById('editActionForm');
             let formData = {
@@ -1074,12 +1139,16 @@
                 quem: editActionForm.editQuem.value,
                 quando: editActionForm.editQuando.value
             };
+
+            // Aqui você pode adicionar a lógica para salvar a edição
             console.log("Dados editados:", formData);
             closeEditModal();
         }
 
+        // Adiciona o evento de carregamento da página
         document.addEventListener("DOMContentLoaded", fetchDataAndRenderTable);
 
+        // Adiciona interação ao sidebar "registro-sidebar"
         const registroSidebarItems = document.querySelectorAll('.registro-sidebar ul li');
         registroSidebarItems.forEach(item => {
             item.addEventListener('click', () => {
