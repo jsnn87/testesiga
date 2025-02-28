@@ -220,15 +220,13 @@
         /* Sidebar dentro do container Ação */
         .registro-sidebar {
             position: absolute;
-            top: 0;
-            right: 0;
-            width: auto;
+            bottom: 20px; /* Posiciona na parte inferior */
+            right: 20px; /* Posiciona à direita */
             background: transparent;
             z-index: 10;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 10px;
+            justify-content: flex-end; /* Alinha os itens à direita */
+            align-items: flex-end; /* Alinha os itens na parte inferior */
         }
 
         .registro-sidebar ul {
@@ -236,13 +234,13 @@
             padding: 0;
             margin: 0;
             display: flex;
-            justify-content: space-around;
+            gap: 10px; /* Espaçamento entre os itens */
         }
 
         .registro-sidebar ul li {
             position: relative;
-            width: 100px;
-            height: 60px;
+            width: 60px; /* Tamanho reduzido */
+            height: 60px; /* Tamanho reduzido */
             cursor: pointer;
             background: crimson;
             text-transform: uppercase;
@@ -250,10 +248,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 0 !important;
+            border-radius: 10px; /* Bordas arredondadas */
         }
 
-        /* Estado selecionado no sidebar */
         .registro-sidebar ul li.selecionado {
             background-color: #333 !important;
         }
@@ -262,76 +259,13 @@
             color: white !important;
         }
 
-        /* Estilos para os logos das marcas */
-        .registro-sidebar ul li img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            transition: opacity 0.4s ease-out;
-        }
-
-        /* Arredondar bordas específicas */
-        .registro-sidebar ul li:first-child {
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
-
-        .registro-sidebar ul li:last-child {
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        /* Esconde o logo ao passar o mouse */
-        .registro-sidebar ul li:hover img {
-            opacity: 0;
-        }
-
-        /* Remove estilos desnecessários */
-        .registro-sidebar ul li:after {
-            position: absolute;
-            background: white;
-            color: crimson;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transform: translateY(0);
-            transition: all 0.4s ease-out;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        /* Texto do segundo sidebar */
-        .registro-sidebar ul li:nth-child(1):after {
-            content: "REGISTRAR";
-        }
-
-        .registro-sidebar ul li:nth-child(2):after {
-            content: "HISTORICO";
+        .registro-sidebar ul li i {
+            color: white;
+            font-size: 24px; /* Tamanho do ícone reduzido */
         }
 
         .registro-sidebar ul li:hover {
-            background: transparent;
-        }
-
-        .registro-sidebar ul li:hover:after {
-            opacity: 1;
-            transform: translateY(-100%);
-        }
-
-        /* Fixar o título da tabela */
-        .fixed-title {
-            position: sticky;
-            top: 0;
-            background-color: white;
-            z-index: 1;
-            padding: 15px;
-            border-bottom: 1px solid #ccc;
-            margin-bottom: 20px;
+            background: darkred; /* Cor ao passar o mouse */
         }
 
         /* Modal */
@@ -353,7 +287,6 @@
             padding: 20px;
             border-radius: 10px;
             width: 70%;
-            /* Ocupa 70% da tela */
             max-width: 800px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             position: relative;
@@ -376,7 +309,6 @@
 
         .modal-body {
             font-size: 18px;
-            /* Tamanho do texto proporcional ao modal */
             line-height: 1.6;
         }
 
@@ -436,22 +368,15 @@
             background-color: darkred;
         }
 
-        /* Ícones do Sidebar dentro do container Registro */
-        .registro-sidebar ul li i {
-            color: white;
-            font-size: 30px;
-        }
-
         /* Estilos da tabela */
         .data-table {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
             flex: 1;
-            margin: 0 auto; /* Centraliza a tabela */
+            margin: 0 auto;
         }
 
-        /* Cabeçalho maior */
         .data-table th {
             background-color: crimson;
             color: white;
@@ -460,23 +385,22 @@
             top: 0;
             z-index: 1;
             white-space: nowrap;
-            height: 60px; /* Altura maior para o cabeçalho */
-            font-size: 20px; /* Tamanho maior para o texto do cabeçalho */
+            height: 60px;
+            font-size: 20px;
             padding: 15px;
             text-align: center;
             vertical-align: middle;
         }
 
-        /* Linhas uniformes */
         .data-table td {
             padding: 10px;
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: middle;
-            height: 80px; /* Altura fixa para todas as linhas */
-            white-space: nowrap; /* Evita a quebra de linha */
-            overflow: hidden; /* Esconde o conteúdo que ultrapassa */
-            text-overflow: ellipsis; /* Adiciona "..." ao texto que ultrapassa */
+            height: 80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .data-table tr:nth-child(even) {
@@ -487,7 +411,6 @@
             background-color: #f1f1f1;
         }
 
-        /* Coluna de ações */
         .action-column {
             display: flex;
             gap: 10px;
@@ -550,7 +473,7 @@
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             background-color: #ffffff;
-            overflow: hidden; /* Remove a barra de rolagem */
+            overflow: hidden;
         }
 
         #viewModal .modal-header {
@@ -579,7 +502,7 @@
         #viewModal .modal-body {
             display: flex;
             gap: 20px;
-            height: calc(100% - 60px); /* Ajusta a altura para ocupar o espaço disponível */
+            height: calc(100% - 60px);
         }
 
         #viewModal .left-column-modal {
@@ -610,14 +533,14 @@
         }
 
         #viewModal .info-box.como-box {
-            flex: 1; /* Expande para ocupar todo o espaço vertical */
+            flex: 1;
             display: flex;
             flex-direction: column;
         }
 
         #viewModal .info-box.como-box p {
-            flex: 1; /* Expande o parágrafo para ocupar o espaço restante */
-            overflow: hidden; /* Remove a barra de rolagem */
+            flex: 1;
+            overflow: hidden;
         }
 
         /* Estilos para paginação */
@@ -1088,7 +1011,8 @@
 
         // Função para abrir o modal de edição com os dados da linha selecionada
         function openEditModalWithData(index) {
-            const rowData = allRows[index];
+            const rowIndex = (currentPage - 1) * rowsPerPage + index; // Calcula o índice correto
+            const rowData = allRows[rowIndex];
             document.getElementById("editOQue").value = rowData[1];
             document.getElementById("editComo").value = rowData[2];
             document.getElementById("editQuem").value = rowData[3];
@@ -1098,8 +1022,9 @@
 
         // Função para deletar uma linha
         function deleteRow(index) {
+            const rowIndex = (currentPage - 1) * rowsPerPage + index; // Calcula o índice correto
             if (confirm("Tem certeza que deseja deletar esta ação?")) {
-                allRows.splice(index, 1);
+                allRows.splice(rowIndex, 1);
                 renderTable(currentPage); // Atualiza a tabela após deletar
                 updatePagination(); // Atualiza a paginação após deletar
             }
@@ -1107,7 +1032,8 @@
 
         // Função para visualizar uma linha (atualizada)
         function viewRow(index) {
-            const rowData = allRows[index];
+            const rowIndex = (currentPage - 1) * rowsPerPage + index; // Calcula o índice correto
+            const rowData = allRows[rowIndex];
             document.getElementById("viewQuem").textContent = rowData[3];
             document.getElementById("viewOQue").textContent = rowData[1];
             document.getElementById("viewDataRegistro").textContent = formatDate(new Date().toISOString().split('T')[0]); // Formata a data atual
