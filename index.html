@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -220,13 +219,13 @@
         /* Sidebar dentro do container Ação */
         .registro-sidebar {
             position: absolute;
-            bottom: 20px; /* Posiciona na parte inferior */
-            right: 20px; /* Posiciona à direita */
+            bottom: 10px;
+            right: 10px;
             background: transparent;
             z-index: 10;
             display: flex;
-            justify-content: flex-end; /* Alinha os itens à direita */
-            align-items: flex-end; /* Alinha os itens na parte inferior */
+            justify-content: flex-end;
+            align-items: flex-end;
         }
 
         .registro-sidebar ul {
@@ -234,13 +233,13 @@
             padding: 0;
             margin: 0;
             display: flex;
-            gap: 10px; /* Espaçamento entre os itens */
+            gap: 10px;
         }
 
         .registro-sidebar ul li {
             position: relative;
-            width: 60px; /* Tamanho reduzido */
-            height: 60px; /* Tamanho reduzido */
+            width: 40px;
+            height: 40px;
             cursor: pointer;
             background: crimson;
             text-transform: uppercase;
@@ -248,7 +247,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 10px; /* Bordas arredondadas */
+            border-radius: 10px;
         }
 
         .registro-sidebar ul li.selecionado {
@@ -261,11 +260,11 @@
 
         .registro-sidebar ul li i {
             color: white;
-            font-size: 24px; /* Tamanho do ícone reduzido */
+            font-size: 24px;
         }
 
         .registro-sidebar ul li:hover {
-            background: darkred; /* Cor ao passar o mouse */
+            background: darkred;
         }
 
         /* Modal */
@@ -331,7 +330,8 @@
 
         .form-group input[type="text"],
         .form-group textarea,
-        .form-group input[type="date"] {
+        .form-group input[type="date"],
+        .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -342,7 +342,8 @@
 
         .form-group input[type="text"]:focus,
         .form-group textarea:focus,
-        .form-group input[type="date"]:focus {
+        .form-group input[type="date"]:focus,
+        .form-group select:focus {
             border-color: crimson;
             outline: none;
         }
@@ -375,6 +376,16 @@
             table-layout: fixed;
             flex: 1;
             margin: 0 auto;
+            overflow-y: auto;
+        }
+
+        .data-table::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .data-table::-webkit-scrollbar-thumb {
+            background-color: crimson;
+            border-radius: 5px;
         }
 
         .data-table th {
@@ -501,46 +512,45 @@
         /* Novo layout para o modal de visualização */
         #viewModal .modal-body {
             display: flex;
+            flex-direction: column;
             gap: 20px;
             height: calc(100% - 60px);
         }
 
-        #viewModal .left-column-modal {
+        /* Linha superior com Marca, O quê, Quem, Quando e Data de Registro */
+        .info-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Estilo para cada campo na linha superior */
+        .info-row .info-box {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        #viewModal .right-column-modal {
-            flex: 2;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #viewModal .info-box {
             background-color: #f9f9f9;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
-            padding: 24px;
+            padding: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        #viewModal .info-box:hover {
+        /* Estilo para o campo Como */
+        .como-box {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Efeito de hover nos campos */
+        .info-box:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        #viewModal .info-box.como-box {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #viewModal .info-box.como-box p {
-            flex: 1;
-            overflow: hidden;
         }
 
         /* Estilos para paginação */
@@ -601,6 +611,155 @@
         .slide-left {
             animation: slideInLeft 0.5s ease-out;
         }
+
+        /* Sidebar Marcas */
+        .sidebar-marcas {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: auto;
+            background: transparent;
+            z-index: 10;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 10px;
+        }
+
+        .sidebar-marcas ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .sidebar-marcas ul li {
+            position: relative;
+            width: 100px;
+            height: 60px;
+            cursor: pointer;
+            background: crimson;
+            text-transform: uppercase;
+            transition: all 0.4s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0 !important;
+        }
+
+        .sidebar-marcas ul li img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            transition: opacity 0.4s ease-out;
+        }
+
+        .sidebar-marcas ul li:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .sidebar-marcas ul li:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .sidebar-marcas ul li:hover img {
+            opacity: 0;
+        }
+
+        .sidebar-marcas ul li:after {
+            position: absolute;
+            background: white;
+            color: crimson;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: translateY(0);
+            transition: all 0.4s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .sidebar-marcas ul li:nth-child(1):after {
+            content: "ASICS";
+        }
+
+        .sidebar-marcas ul li:nth-child(2):after {
+            content: "FILA";
+        }
+
+        .sidebar-marcas ul li:nth-child(3):after {
+            content: "UMBRO";
+        }
+
+        .sidebar-marcas ul li:hover {
+            background: transparent;
+        }
+
+        .sidebar-marcas ul li:hover:after {
+            opacity: 1;
+            transform: translateY(-100%);
+        }
+
+        /* Estilo para itens selecionados */
+        .sidebar-marcas ul li.selecionado {
+            background-color: #333 !important;
+        }
+
+        .sidebar-marcas ul li.selecionado img {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Toast */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
@@ -622,6 +781,7 @@
             </li>
         </ul>
     </nav>
+
     <!-- Seções -->
     <section id="status" class="page active">
         <div class="main-container">
@@ -654,14 +814,40 @@
             </div>
         </div>
     </section>
+
     <section id="agenda" class="page">
         <div class="registro-container">
             <h2>Calendário de Apresentação de Gerenciamento Diário</h2>
         </div>
     </section>
+
     <section id="registro" class="page">
         <div class="registro-container">
             <h2 class="fixed-title">Plano de Ação</h2>
+
+            <!-- Sidebar Marcas -->
+            <div class="sidebar-marcas">
+                <ul>
+                    <li id="filtroASICS" onclick="filtrarTabela('ASICS')">
+                        <div>
+                            <img src="https://i.postimg.cc/gkYJWM1C/logo-das-marcas-page-0003-removebg-preview.png"
+                                alt="ASICS">
+                        </div>
+                    </li>
+                    <li id="filtroFILA" onclick="filtrarTabela('FILA')">
+                        <div>
+                            <img src="https://i.postimg.cc/HW0xFGv0/logo-das-marcas-page-0001-removebg-preview.png"
+                                alt="FILA">
+                        </div>
+                    </li>
+                    <li id="filtroUMBRO" onclick="filtrarTabela('UMBRO')">
+                        <div>
+                            <img src="https://i.postimg.cc/nrxLMTrQ/logo-das-marcas-page-0002-removebg-preview-1.png"
+                                alt="UMBRO">
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
             <!-- Container da tabela -->
             <div id="plano-de-acao-container"></div>
@@ -682,6 +868,7 @@
             </div>
         </div>
     </section>
+
     <!-- Modal de Registrar Ação -->
     <div id="myModal" class="modal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -690,6 +877,15 @@
             </div>
             <form id="actionForm">
                 <div class="form-group">
+                    <div class="form-group">
+                        <label for="marca"><i class="fas fa-calendar-alt"></i> Marca</label>
+                        <select id="marca" name="marca" required>
+                            <option value="">Selecione uma marca</option>
+                            <option value="ASICS">ASICS</option>
+                            <option value="FILA">FILA</option>
+                            <option value="UMBRO">UMBRO</option>
+                        </select>
+                    </div>
                     <label for="oQue"><i class="fas fa-question-circle"></i> O quê?</label>
                     <input type="text" id="oQue" name="oQue" placeholder="Descreva a ação..." required>
                 </div>
@@ -709,6 +905,7 @@
             </form>
         </div>
     </div>
+
     <!-- Modal de Editar Ação -->
     <div id="editModal" class="modal" onclick="closeEditModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -717,13 +914,16 @@
             </div>
             <form id="editActionForm">
                 <div class="form-group">
+                    <div class="form-group">
+                        <label for="editMarca"><i class="fas fa-calendar-alt"></i> Marca</label>
+                        <input type="text" id="editMarca" name="editMarca" required>
+                    </div>
                     <label for="editOQue"><i class="fas fa-question-circle"></i> O quê?</label>
                     <input type="text" id="editOQue" name="editOQue" placeholder="Descreva a ação..." required>
                 </div>
                 <div class="form-group">
                     <label for="editComo"><i class="fas fa-tasks"></i> Como?</label>
-                    <textarea id="editComo" name="editComo" placeholder="Explique como será feito..."
-                        required></textarea>
+                    <textarea id="editComo" name="editComo" placeholder="Explique como será feito..." required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="editQuem"><i class="fas fa-user"></i> Quem?</label>
@@ -737,6 +937,7 @@
             </form>
         </div>
     </div>
+
     <!-- Modal de Visualização -->
     <div id="viewModal" class="modal" onclick="closeViewModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -744,39 +945,49 @@
                 <h2><i class="fas fa-eye"></i> Visualizar Ação</h2>
             </div>
             <div id="viewModalContent" class="modal-body">
-                <div class="left-column-modal">
+                <!-- Linha superior com Marca, O quê, Quem, Quando e Data de Registro -->
+                <div class="info-row">
                     <div class="info-box">
-                        <strong>Quem?</strong>
-                        <p id="viewQuem"></p>
+                        <strong>Marca</strong>
+                        <p id="viewMarca"></p>
                     </div>
                     <div class="info-box">
                         <strong>O quê?</strong>
                         <p id="viewOQue"></p>
                     </div>
                     <div class="info-box">
-                        <strong>Data de Registro:</strong>
-                        <p id="viewDataRegistro"></p>
+                        <strong>Quem?</strong>
+                        <p id="viewQuem"></p>
                     </div>
                     <div class="info-box">
                         <strong>Quando?</strong>
                         <p id="viewQuando"></p>
                     </div>
-                </div>
-                <div class="right-column-modal">
-                    <div class="info-box como-box">
-                        <strong>Como?</strong>
-                        <p id="viewComo"></p>
+                    <div class="info-box">
+                        <strong>Data de Registro:</strong>
+                        <p id="viewDataRegistro"></p>
                     </div>
+                </div>
+                <!-- Campo Como abaixo de todos -->
+                <div class="info-box como-box">
+                    <strong>Como?</strong>
+                    <p id="viewComo"></p>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
     <script>
         let allRows = []; // Armazena todas as linhas da tabela
         let tableHeaders = []; // Armazena os cabeçalhos da tabela
         let currentPage = 1;
         const rowsPerPage = 10;
         const maxVisiblePages = 5; // Número máximo de páginas visíveis na paginação
+        let currentFilter = null; // Armazena o filtro atual (marca selecionada)
+        let filteredRows = []; // Armazena as linhas filtradas
 
         function showPage(page) {
             var sections = document.querySelectorAll('.page');
@@ -806,12 +1017,8 @@
 
             // Seleciona o bloco "REGISTRAR" no sidebar interno
             const registrarBlock = document.getElementById('filtroREGISTAR');
-
-            // Muda a cor de fundo do bloco para vermelho (crimson)
             if (registrarBlock) {
                 registrarBlock.style.backgroundColor = 'crimson';
-
-                // Seleciona o ícone dentro do bloco e muda a cor para branco
                 const icon = registrarBlock.querySelector('i');
                 if (icon) {
                     icon.style.color = 'white';
@@ -835,33 +1042,80 @@
             viewModal.style.display = "none";
         }
 
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        /*
+          submitAction() - registra uma nova ação.
+          Ajustes principais: removido 'mode: no-cors' e
+          adicionada checagem da resposta.
+          Obs: Certifique-se de que o Web App do Apps Script
+          retorne algo (ex: "Success") no final do doPost.
+        */
         function submitAction() {
             const actionForm = document.getElementById('actionForm');
+            const marca = actionForm.marca.value;
+            const oQue = actionForm.oQue.value;
+            const como = actionForm.como.value;
+            const quem = actionForm.quem.value;
+            const quando = actionForm.quando.value;
+
+            if (!marca || !oQue || !como || !quem || !quando) {
+                showToast("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            // Monta os dados que serão enviados; ideal ter um 'action' no Apps Script
             let formData = {
-                oQue: actionForm.oQue.value,
-                como: actionForm.como.value,
-                quem: actionForm.quem.value,
-                quando: actionForm.quando.value
+                // por exemplo: action: "submitAction", se o seu GAS tiver isso
+                // action: "submitAction",
+                marca: marca,
+                oQue: oQue,
+                como: como,
+                quem: quem,
+                quando: quando,
             };
 
-            fetch('https://script.google.com/macros/s/AKfycbwBalbPam5APYiUKBJrIbucJH8qc6dgufW8revrbrBKKDx2nmKa_Cir0d6C18QVGeV8/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbyb2XO7jg9IPZOjAecHVaWA_IHHBKnUGjuDin8AnLekm5X4FUecQ12tTB0i8XIgxqt6/exec', {
                 method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(formData),
                 headers: {
                     'Content-Type': 'application/json'
+                },
+                // IMPORTANTE: removemos 'mode: no-cors'
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                // Verifica se a resposta HTTP é OK
+                if (!response.ok) {
+                    throw new Error(`Erro: ${response.status}`);
                 }
-            }).then(response => {
-                console.log('Success:', response);
+                return response.text();
+            })
+            .then(text => {
+                console.log('Resposta do servidor:', text);
+                // Supondo que o GAS retorne "Success" ou algo do tipo
+                if (text.includes("Success")) {
+                    showToast("Ação registrada com sucesso!");
+                } else {
+                    showToast("Retorno do servidor: " + text);
+                }
                 closeModal();
                 fetchDataAndRenderTable(); // Atualiza a tabela após salvar
-            }).catch(error => {
+            })
+            .catch(error => {
                 console.error('Error:', error);
+                showToast("Ocorreu um erro ao registrar a ação.");
             });
         }
 
         function fetchDataAndRenderTable() {
-            const url = "https://script.google.com/macros/s/AKfycbwbg0OT3J13N_zoJ7WA5T8SrWSAVKp9tCnjYGK33XweS-5l7Om-vGeqAWdqiwO1h0ME/exec";
+            const url = "https://script.google.com/macros/s/AKfycbyb2XO7jg9IPZOjAecHVaWA_IHHBKnUGjuDin8AnLekm5X4FUecQ12tTB0i8XIgxqt6/exec";
 
             fetch(url)
                 .then(response => response.json())
@@ -869,21 +1123,18 @@
                     const { headers, rows } = data;
                     allRows = rows; // Armazena todas as linhas
                     tableHeaders = headers; // Armazena os cabeçalhos
-                    renderTable(currentPage); // Renderiza a tabela
-                    updatePagination(); // Atualiza a paginação
+                    filtrarTabela(currentFilter); // Renderiza a tabela com o filtro atual
                 })
                 .catch(error => {
                     console.error("Erro ao buscar dados:", error);
+                    showToast("Erro ao carregar dados.");
                 });
         }
 
-        function renderTable(page) {
+        function renderTable(page, filterMarca = null) {
             const container = document.querySelector("#plano-de-acao-container");
-
-            // Limpa o container
             container.innerHTML = "";
 
-            // Cria a tabela
             const table = document.createElement("table");
             table.classList.add("data-table");
 
@@ -891,14 +1142,14 @@
             const thead = document.createElement("thead");
             const headerRow = document.createElement("tr");
 
-            // Adiciona as colunas de A a F
-            for (let i = 0; i < 6; i++) {
+            // Adiciona as colunas de A a G (7 colunas)
+            for (let i = 0; i < 7; i++) {
                 const th = document.createElement("th");
-                th.textContent = tableHeaders[i] || `Coluna ${String.fromCharCode(65 + i)}`; // A, B, C, D, E, F
+                th.textContent = tableHeaders[i] || `Coluna ${String.fromCharCode(65 + i)}`; // A, B, C, D, E, F, G
                 headerRow.appendChild(th);
             }
 
-            // Adiciona a coluna de ações ao cabeçalho
+            // Adiciona a coluna de ações
             const actionHeader = document.createElement("th");
             actionHeader.textContent = "Ações";
             headerRow.appendChild(actionHeader);
@@ -912,24 +1163,36 @@
             const startIndex = (page - 1) * rowsPerPage;
             const endIndex = startIndex + rowsPerPage;
 
-            allRows.slice(startIndex, endIndex).forEach((row, index) => {
+            // Filtra as linhas com base na marca selecionada
+            filteredRows = filterMarca
+                ? allRows.filter(row => row[1] === filterMarca)
+                : allRows;
+
+            filteredRows.slice(startIndex, endIndex).forEach((row, index) => {
                 const tr = document.createElement("tr");
 
-                // Adiciona as colunas de A a F
-                for (let i = 0; i < 6; i++) {
+                // Adiciona as colunas de A a G
+                for (let i = 0; i < 7; i++) {
                     const td = document.createElement("td");
-                    td.textContent = row[i] || ""; // Exibe o valor da célula ou vazio se não existir
+                    if (i === 5 || i === 6) {
+                        // Colunas que possam ser datas
+                        td.textContent = formatDate(row[i]) || "";
+                    } else {
+                        td.textContent = row[i] || "";
+                    }
                     tr.appendChild(td);
                 }
 
                 // Adiciona a coluna de ações
                 const actionCell = document.createElement("td");
                 actionCell.classList.add("action-column");
+
+                // Ícones da coluna Ações
                 actionCell.innerHTML = `
-                    <i class="fas fa-check" data-tooltip="Concluir" onclick="markAsCompleted(${index})"></i>
-                    <i class="fas fa-edit" data-tooltip="Editar" onclick="openEditModalWithData(${index})"></i>
-                    <i class="fas fa-trash" data-tooltip="Excluir" onclick="deleteRow(${index})"></i>
-                    <i class="fas fa-eye" data-tooltip="Visualizar" onclick="viewRow(${index})"></i>
+                    <i class="fas fa-check" data-tooltip="Concluir" onclick="markAsCompleted(${startIndex + index})"></i>
+                    <i class="fas fa-edit" data-tooltip="Editar" onclick="openEditModalWithData(${startIndex + index})"></i>
+                    <i class="fas fa-trash" data-tooltip="Excluir" onclick="deleteRow(${startIndex + index})"></i>
+                    <i class="fas fa-eye" data-tooltip="Visualizar" onclick="viewRow(${startIndex + index})"></i>
                 `;
                 tr.appendChild(actionCell);
 
@@ -938,57 +1201,55 @@
 
             table.appendChild(tbody);
             container.appendChild(table);
+
+            updatePagination();
         }
 
         function updatePagination() {
             const pagination = document.getElementById("pagination");
             pagination.innerHTML = "";
 
-            const totalPages = Math.ceil(allRows.length / rowsPerPage);
+            const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+            if (totalPages <= 1) return; // Se só tem 1 página, não mostra nada
 
-            if (totalPages > 1) {
-                const prevButton = document.createElement("button");
-                prevButton.textContent = "Anterior";
-                prevButton.addEventListener("click", () => {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        renderTable(currentPage);
-                        updatePagination();
-                        animateTable('left'); // Animação para a esquerda
-                    }
-                });
-                pagination.appendChild(prevButton);
-
-                const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-                const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-                for (let i = startPage; i <= endPage; i++) {
-                    const button = document.createElement("button");
-                    button.textContent = i;
-                    if (i === currentPage) button.classList.add("active");
-                    button.addEventListener("click", () => {
-                        currentPage = i;
-                        renderTable(i);
-                        updatePagination();
-                    });
-                    pagination.appendChild(button);
+            const prevButton = document.createElement("button");
+            prevButton.textContent = "Anterior";
+            prevButton.addEventListener("click", () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable(currentPage, currentFilter);
+                    animateTable('left');
                 }
+            });
+            pagination.appendChild(prevButton);
 
-                const nextButton = document.createElement("button");
-                nextButton.textContent = "Próximo";
-                nextButton.addEventListener("click", () => {
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        renderTable(currentPage);
-                        updatePagination();
-                        animateTable('right'); // Animação para a direita
-                    }
+            const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            for (let i = startPage; i <= endPage; i++) {
+                const button = document.createElement("button");
+                button.textContent = i;
+                if (i === currentPage) button.classList.add("active");
+                button.addEventListener("click", () => {
+                    currentPage = i;
+                    renderTable(i, currentFilter);
                 });
-                pagination.appendChild(nextButton);
+                pagination.appendChild(button);
             }
+
+            const nextButton = document.createElement("button");
+            nextButton.textContent = "Próximo";
+            nextButton.addEventListener("click", () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable(currentPage, currentFilter);
+                    animateTable('right');
+                }
+            });
+            pagination.appendChild(nextButton);
         }
 
-        // Função para animar a tabela
+        // Animação da tabela ao trocar de página
         function animateTable(direction) {
             const container = document.querySelector("#plano-de-acao-container");
             if (direction === 'right') {
@@ -998,57 +1259,51 @@
                 container.classList.remove('slide-right');
                 container.classList.add('slide-left');
             }
-            // Remove a classe de animação após a animação terminar
             setTimeout(() => {
                 container.classList.remove('slide-right', 'slide-left');
-            }, 500); // Duração da animação
+            }, 500);
         }
 
-        // Função para marcar uma ação como concluída
-        function markAsCompleted(index) {
-            alert(`Ação ${index + 1} marcada como concluída.`);
-        }
-
-        // Função para abrir o modal de edição com os dados da linha selecionada
+        // Abre o modal de edição com os dados da linha selecionada
         function openEditModalWithData(index) {
-            const rowIndex = (currentPage - 1) * rowsPerPage + index; // Calcula o índice correto
-            const rowData = allRows[rowIndex];
-            document.getElementById("editOQue").value = rowData[1];
-            document.getElementById("editComo").value = rowData[2];
-            document.getElementById("editQuem").value = rowData[3];
-            document.getElementById("editQuando").value = rowData[4];
+            const rowData = filteredRows[index];
+            document.getElementById("editMarca").value = rowData[1];
+            document.getElementById("editOQue").value = rowData[2];
+            document.getElementById("editComo").value = rowData[3];
+            document.getElementById("editQuem").value = rowData[4];
+            // rowData[5] seria "Quando"
+            document.getElementById("editQuando").value = formatForInputDate(rowData[5]);
             openEditModal();
         }
 
-        // Função para deletar uma linha
-        function deleteRow(index) {
-            const rowIndex = (currentPage - 1) * rowsPerPage + index; // Calcula o índice correto
-            if (confirm("Tem certeza que deseja deletar esta ação?")) {
-                allRows.splice(rowIndex, 1);
-                renderTable(currentPage); // Atualiza a tabela após deletar
-                updatePagination(); // Atualiza a paginação após deletar
-            }
-        }
-
-        // Função para visualizar uma linha (atualizada)
+        // Visualiza uma linha
         function viewRow(index) {
-            const rowIndex = (currentPage - 1) * rowsPerPage + index; // Calcula o índice correto
-            const rowData = allRows[rowIndex];
-            document.getElementById("viewQuem").textContent = rowData[3];
-            document.getElementById("viewOQue").textContent = rowData[1];
-            document.getElementById("viewDataRegistro").textContent = formatDate(new Date().toISOString().split('T')[0]); // Formata a data atual
-            document.getElementById("viewQuando").textContent = formatDate(rowData[4]); // Formata a data da linha
-            document.getElementById("viewComo").textContent = rowData[2];
+            const rowData = filteredRows[index];
+            document.getElementById("viewMarca").textContent = rowData[1];
+            document.getElementById("viewOQue").textContent = rowData[2];
+            document.getElementById("viewComo").textContent = rowData[3];
+            document.getElementById("viewQuem").textContent = rowData[4];
+            document.getElementById("viewQuando").textContent = formatDate(rowData[5]);
+            document.getElementById("viewDataRegistro").textContent = formatDate(rowData[6]);
             openViewModal();
         }
 
-        // Função para formatar a data no formato DD/MM/YY
-        function formatDate(dateString) {
-            // Verifica se a data é válida
-            if (!dateString || isNaN(new Date(dateString))) {
-                return "Data inválida"; // Retorna uma mensagem de erro ou um valor padrão
+        // Exclui uma linha (só localmente, sem mandar pro servidor)
+        function deleteRow(index) {
+            if (confirm("Tem certeza que deseja excluir esta ação?")) {
+                const rowData = filteredRows[index];
+                const rowIndex = allRows.findIndex(row => row === rowData);
+                allRows.splice(rowIndex, 1);
+                filtrarTabela(currentFilter);
+                showToast("Ação excluída com sucesso!");
             }
+        }
 
+        // Formata data (string) em DD/MM/YY
+        function formatDate(dateString) {
+            if (!dateString || isNaN(new Date(dateString))) {
+                return "";
+            }
             const date = new Date(dateString);
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -1056,25 +1311,101 @@
             return `${day}/${month}/${year}`;
         }
 
-        // Função para salvar a edição da ação
+        // Formata a data pra usar em <input type="date"> (YYYY-MM-DD)
+        function formatForInputDate(dateString) {
+            if (!dateString) return "";
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return "";
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Salva a edição da ação (ainda não envia para servidor, se quiser enviar, faça outro fetch)
         function submitEditAction() {
             const editActionForm = document.getElementById('editActionForm');
             let formData = {
+                marca: editActionForm.editMarca.value,
                 oQue: editActionForm.editOQue.value,
                 como: editActionForm.editComo.value,
                 quem: editActionForm.editQuem.value,
                 quando: editActionForm.editQuando.value
             };
-
-            // Aqui você pode adicionar a lógica para salvar a edição
-            console.log("Dados editados:", formData);
+            console.log("Dados editados (ajuste se for mandar pro servidor):", formData);
             closeEditModal();
+            showToast("Ação editada (localmente) com sucesso!");
         }
 
-        // Adiciona o evento de carregamento da página
+        // Filtra a tabela por marca
+        function filtrarTabela(marca) {
+            // Remove a classe 'selecionado' de todos
+            const marcaItems = document.querySelectorAll('.sidebar-marcas ul li');
+            marcaItems.forEach(item => item.classList.remove('selecionado'));
+
+            const selectedItem = document.getElementById(`filtro${marca}`);
+            if (selectedItem) {
+                selectedItem.classList.add('selecionado');
+            }
+
+            currentFilter = marca;
+            currentPage = 1;
+            renderTable(currentPage, marca);
+        }
+
+        // Marca como concluída (exemplo de requisição POST)
+        function markAsCompleted(index) {
+            const rowData = filteredRows[index];
+            const id = rowData[0];
+            if (!id) {
+                showToast("ID da linha não encontrado.");
+                return;
+            }
+
+            // Data atual em dd/mm/yy
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = String(today.getFullYear()).slice(-2);
+            const formattedDate = `${day}/${month}/${year}`;
+
+            // URL do Apps Script que trata 'markAsCompleted'
+            fetch('https://script.google.com/macros/s/AKfycbxsffXha_zgpQWjCaZ1QxLtrfYBMwTqqGew56IwZ1qUsOhfVZerHWxpNM9HbYUOmHFV/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'markAsCompleted',
+                    id: id,
+                    date: formattedDate
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                console.log("Resposta do servidor:", text);
+                if (text.includes("Success")) {
+                    showToast("Ação concluída com sucesso!");
+                    fetchDataAndRenderTable(); // Atualiza a tabela
+                } else {
+                    showToast("Erro ao concluir a ação: " + text);
+                }
+            })
+            .catch(error => {
+                console.error("Erro:", error);
+                showToast("Erro ao concluir a ação.");
+            });
+        }
+
+        // Carrega dados ao abrir a página
         document.addEventListener("DOMContentLoaded", fetchDataAndRenderTable);
 
-        // Adiciona interação ao sidebar "registro-sidebar"
+        // Interação com o sidebar interno "registro-sidebar"
         const registroSidebarItems = document.querySelectorAll('.registro-sidebar ul li');
         registroSidebarItems.forEach(item => {
             item.addEventListener('click', () => {
@@ -1084,5 +1415,4 @@
         });
     </script>
 </body>
-
 </html>
