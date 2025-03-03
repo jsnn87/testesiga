@@ -1,5 +1,7 @@
+carregar somente os dados que estiverem vazio na coluna h na tabela
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -587,6 +589,7 @@
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -598,6 +601,7 @@
                 transform: translateX(-100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -744,6 +748,7 @@
                 bottom: 0;
                 opacity: 0;
             }
+
             to {
                 bottom: 30px;
                 opacity: 1;
@@ -755,6 +760,7 @@
                 bottom: 30px;
                 opacity: 1;
             }
+
             to {
                 bottom: 0;
                 opacity: 0;
@@ -923,7 +929,8 @@
                 </div>
                 <div class="form-group">
                     <label for="editComo"><i class="fas fa-tasks"></i> Como?</label>
-                    <textarea id="editComo" name="editComo" placeholder="Explique como será feito..." required></textarea>
+                    <textarea id="editComo" name="editComo" placeholder="Explique como será feito..."
+                        required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="editQuem"><i class="fas fa-user"></i> Quem?</label>
@@ -1090,28 +1097,28 @@
                 // IMPORTANTE: removemos 'mode: no-cors'
                 body: JSON.stringify(formData)
             })
-            .then(response => {
-                // Verifica se a resposta HTTP é OK
-                if (!response.ok) {
-                    throw new Error(`Erro: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(text => {
-                console.log('Resposta do servidor:', text);
-                // Supondo que o GAS retorne "Success" ou algo do tipo
-                if (text.includes("Success")) {
-                    showToast("Ação registrada com sucesso!");
-                } else {
-                    showToast("Retorno do servidor: " + text);
-                }
-                closeModal();
-                fetchDataAndRenderTable(); // Atualiza a tabela após salvar
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast("Ocorreu um erro ao registrar a ação.");
-            });
+                .then(response => {
+                    // Verifica se a resposta HTTP é OK
+                    if (!response.ok) {
+                        throw new Error(`Erro: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    console.log('Resposta do servidor:', text);
+                    // Supondo que o GAS retorne "Success" ou algo do tipo
+                    if (text.includes("Success")) {
+                        showToast("Ação registrada com sucesso!");
+                    } else {
+                        showToast("Retorno do servidor: " + text);
+                    }
+                    closeModal();
+                    fetchDataAndRenderTable(); // Atualiza a tabela após salvar
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast("Ocorreu um erro ao registrar a ação.");
+                });
         }
 
         function fetchDataAndRenderTable() {
@@ -1288,14 +1295,47 @@
             openViewModal();
         }
 
-        // Exclui uma linha (só localmente, sem mandar pro servidor)
+
+
         function deleteRow(index) {
+            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
+            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
+
+            if (!id) {
+                showToast("ID da linha não encontrado.");
+                return;
+            }
+
             if (confirm("Tem certeza que deseja excluir esta ação?")) {
                 const rowData = filteredRows[index];
                 const rowIndex = allRows.findIndex(row => row === rowData);
                 allRows.splice(rowIndex, 1);
                 filtrarTabela(currentFilter);
                 showToast("Ação excluída com sucesso!");
+                // Envia a requisição para o Google Apps Script
+                fetch('https://script.google.com/macros/s/AKfycbxEn7wc-6TTLUJWg0Xgz00rgx7_2OOXc12uhmGnwSPIiC2vQphlyxYOwGxJ6X7w5BzTOg/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        action: 'deleteRow',
+                        id: id // Envia o ID da linha a ser excluída
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            showToast("Ação excluída com sucesso!");
+                            fetchDataAndRenderTable(); // Atualiza a tabela após a exclusão
+                        } else {
+                            showToast("Erro ao excluir a ação.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        showToast("Erro ao excluir a ação.");
+                    });
             }
         }
 
@@ -1355,51 +1395,48 @@
 
         // Marca como concluída (exemplo de requisição POST)
         function markAsCompleted(index) {
-            const rowData = filteredRows[index];
-            const id = rowData[0];
+            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
+            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
+
             if (!id) {
                 showToast("ID da linha não encontrado.");
                 return;
             }
 
-            // Data atual em dd/mm/yy
+            // Obtém a data atual no formato dd/mm/yy
             const today = new Date();
             const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const year = String(today.getFullYear()).slice(-2);
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+            const year = String(today.getFullYear()).slice(-2); // Pega os últimos 2 dígitos do ano
             const formattedDate = `${day}/${month}/${year}`;
 
-            // URL do Apps Script que trata 'markAsCompleted'
-            fetch('https://script.google.com/macros/s/AKfycbxsffXha_zgpQWjCaZ1QxLtrfYBMwTqqGew56IwZ1qUsOhfVZerHWxpNM9HbYUOmHFV/exec', {
+            // Envia a requisição para o Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbxEn7wc-6TTLUJWg0Xgz00rgx7_2OOXc12uhmGnwSPIiC2vQphlyxYOwGxJ6X7w5BzTOg/exec', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                mode: 'no-cors',
                 body: JSON.stringify({
                     action: 'markAsCompleted',
                     id: id,
-                    date: formattedDate
+                    date: formattedDate // Envia a data no formato dd/mm/yy
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        showToast("Ação concluída com sucesso!");
+                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+                    } else {
+                        showToast("Ação concluir.");
+                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+                    }
                 })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(text => {
-                console.log("Resposta do servidor:", text);
-                if (text.includes("Success")) {
-                    showToast("Ação concluída com sucesso!");
-                    fetchDataAndRenderTable(); // Atualiza a tabela
-                } else {
-                    showToast("Erro ao concluir a ação: " + text);
-                }
-            })
-            .catch(error => {
-                console.error("Erro:", error);
-                showToast("Erro ao concluir a ação.");
-            });
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showToast("Ação concluir.");
+                    fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+                });
         }
 
         // Carrega dados ao abrir a página
@@ -1415,4 +1452,5 @@
         });
     </script>
 </body>
+
 </html>
