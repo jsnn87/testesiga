@@ -767,6 +767,16 @@
                 opacity: 0;
             }
         }
+
+        /* Estilo para o campo de ID (não editável) */
+        #editId {
+            background-color: #f0f0f0;
+            /* Fundo cinza claro */
+            color: #666;
+            /* Texto cinza */
+            cursor: not-allowed;
+            /* Cursor de "não permitido" */
+        }
     </style>
 </head>
 
@@ -921,10 +931,14 @@
             </div>
             <form id="editActionForm">
                 <div class="form-group">
-                    <div class="form-group">
-                        <label for="editMarca"><i class="fas fa-calendar-alt"></i> Marca</label>
-                        <input type="text" id="editMarca" name="editMarca" required>
-                    </div>
+                    <label for="editId"><i class="fas fa-id-card"></i> ID</label>
+                    <input type="text" id="editId" name="editId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="editMarca"><i class="fas fa-calendar-alt"></i> Marca</label>
+                    <input type="text" id="editMarca" name="editMarca" required>
+                </div>
+                <div class="form-group">
                     <label for="editOQue"><i class="fas fa-question-circle"></i> O quê?</label>
                     <input type="text" id="editOQue" name="editOQue" placeholder="Descreva a ação..." required>
                 </div>
@@ -945,6 +959,7 @@
             </form>
         </div>
     </div>
+
 
     <!-- Modal de Visualização -->
     <div id="viewModal" class="modal" onclick="closeViewModal()">
@@ -987,7 +1002,6 @@
 
     <!-- Toast -->
     <div id="toast" class="toast"></div>
-
     <script>
         let allRows = []; // Armazena todas as linhas da tabela
         let tableHeaders = []; // Armazena os cabeçalhos da tabela
@@ -1184,7 +1198,7 @@
                     const td = document.createElement("td");
                     if (i === 5 || i === 6) {
                         // Colunas que possam ser datas
-                        td.textContent = formatDate(row[i]) || "";
+                        td.textContent = formatDateToDisplay(row[i]) || ""; // Formata a data para exibição
                     } else {
                         td.textContent = row[i] || "";
                     }
@@ -1275,14 +1289,19 @@
         // Abre o modal de edição com os dados da linha selecionada
         function openEditModalWithData(index) {
             const rowData = filteredRows[index];
+            document.getElementById("editId").value = rowData[0]; // Preenche o campo ID (não editável)
             document.getElementById("editMarca").value = rowData[1];
             document.getElementById("editOQue").value = rowData[2];
             document.getElementById("editComo").value = rowData[3];
             document.getElementById("editQuem").value = rowData[4];
-            // rowData[5] seria "Quando"
-            document.getElementById("editQuando").value = formatForInputDate(rowData[5]);
+
+            // Converte a data de dd/mm/yy para YYYY-MM-DD
+            const formattedDate = formatDateToInput(rowData[5]);
+            document.getElementById("editQuando").value = formattedDate;
+
             openEditModal();
         }
+
 
         // Visualiza uma linha
         function viewRow(index) {
@@ -1291,12 +1310,13 @@
             document.getElementById("viewOQue").textContent = rowData[2];
             document.getElementById("viewComo").textContent = rowData[3];
             document.getElementById("viewQuem").textContent = rowData[4];
-            document.getElementById("viewQuando").textContent = formatDate(rowData[5]);
-            document.getElementById("viewDataRegistro").textContent = formatDate(rowData[6]);
+
+            // Formata a data para exibição
+            document.getElementById("viewQuando").textContent = formatDateToDisplay(rowData[5]);
+            document.getElementById("viewDataRegistro").textContent = formatDateToDisplay(rowData[6]);
+
             openViewModal();
         }
-
-
 
         function deleteRow(index) {
             const rowData = filteredRows[index]; // Obtém os dados da linha clicada
@@ -1314,7 +1334,7 @@
                 filtrarTabela(currentFilter);
                 showToast("Ação excluída com sucesso!");
                 // Envia a requisição para o Google Apps Script
-                fetch('https://script.google.com/macros/s/AKfycbxEn7wc-6TTLUJWg0Xgz00rgx7_2OOXc12uhmGnwSPIiC2vQphlyxYOwGxJ6X7w5BzTOg/exec', {
+                fetch('https://script.google.com/macros/s/AKfycbyb2XO7jg9IPZOjAecHVaWA_IHHBKnUGjuDin8AnLekm5X4FUecQ12tTB0i8XIgxqt6/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify({
@@ -1341,7 +1361,7 @@
         }
 
         // Formata data (string) em DD/MM/YY
-        function formatDate(dateString) {
+        function formatDateToDisplay(dateString) {
             if (!dateString || isNaN(new Date(dateString))) {
                 return "";
             }
@@ -1353,29 +1373,64 @@
         }
 
         // Formata a data pra usar em <input type="date"> (YYYY-MM-DD)
-        function formatForInputDate(dateString) {
+        function formatDateToInput(dateString) {
             if (!dateString) return "";
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) return "";
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+            const [day, month, year] = dateString.split('/');
+            const fullYear = `20${year}`; // Adiciona "20" para anos como "23" -> "2023"
+            return `${fullYear}-${month}-${day}`;
         }
 
-        // Salva a edição da ação (ainda não envia para servidor, se quiser enviar, faça outro fetch)
+        // Salva a edição da ação
         function submitEditAction() {
+            // Captura os dados do formulário de edição
             const editActionForm = document.getElementById('editActionForm');
-            let formData = {
+            const formData = {
+                action: "editAction",
+                id: editActionForm.editId.value, // ID do item a ser editado
                 marca: editActionForm.editMarca.value,
                 oQue: editActionForm.editOQue.value,
                 como: editActionForm.editComo.value,
                 quem: editActionForm.editQuem.value,
                 quando: editActionForm.editQuando.value
             };
-            console.log("Dados editados (ajuste se for mandar pro servidor):", formData);
-            closeEditModal();
-            showToast("Ação editada (localmente) com sucesso!");
+
+            console.log("Dados enviados:", formData); // Log dos dados para verificação
+
+            // Envia os dados via fetch para o Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycby7ZHT-BJKo-eV_6FA9FUQ3vEks_Oq77-mFnZhiZIMWhuvrx_xmIkAenflgO_bcwc2N/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'no-cors', // Usando 'no-cors'
+                body: JSON.stringify(formData) // Passa os dados no corpo da requisição
+            })
+                .then(response => {
+                    // Com 'no-cors', você não pode acessar a resposta
+                    console.log("Requisição enviada com sucesso");
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+
+
+
+            closeEditModal(); // Fecha o modal após salvar
+        }
+
+        function openEditModalWithData(index) {
+            const rowData = filteredRows[index];
+            document.getElementById("editId").value = rowData[0]; // Preenche o campo ID (não editável)
+            document.getElementById("editMarca").value = rowData[1];
+            document.getElementById("editOQue").value = rowData[2];
+            document.getElementById("editComo").value = rowData[3];
+            document.getElementById("editQuem").value = rowData[4];
+
+            // Converte a data de dd/mm/yy para YYYY-MM-DD
+            const formattedDate = formatDateToInput(rowData[5]);
+            document.getElementById("editQuando").value = formattedDate;
+
+            openEditModal();
         }
 
         // Filtra a tabela por marca
