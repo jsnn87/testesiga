@@ -1089,51 +1089,6 @@
                     showToast("Erro ao carregar dados.");
                 });
         }
-        // Marca como concluída (exemplo de requisição POST)
-        function markAsCompleted(index) {
-            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
-            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
-
-            if (!id) {
-                showToast("ID da linha não encontrado.");
-                return;
-            }
-
-            // Obtém a data atual no formato dd/mm/yy
-            const today = new Date();
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
-            const year = String(today.getFullYear()).slice(-2); // Pega os últimos 2 dígitos do ano
-            const formattedDate = `${day}/${month}/${year}`;
-
-            // Envia a requisição para o Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbwH4AXey19M2mXNKGIhIain2n7c1r9JEMDp8Pi5NVCXLRbHTJtxMMXLmvuXVp6XnlH6Sg/exec', {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    action: 'markAsCompleted',
-                    id: id,
-                    date: formattedDate // Envia a data no formato dd/mm/yy
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        showToast("Ação concluída com sucesso!");
-                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
-                    } else {
-                        showToast("Ação concluir.");
-                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    showToast("Ação concluir.");
-                    fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
-                });
-        }
 
         function renderTable(page, filterMarca = null) {
             const container = document.querySelector("#plano-de-acao-container");
@@ -1209,7 +1164,6 @@
             updatePagination();
         }
 
-
         function updatePagination() {
             const pagination = document.getElementById("pagination");
             pagination.innerHTML = "";
@@ -1269,6 +1223,31 @@
             }, 500);
         }
 
+        // Abre o modal de edição com os dados da linha selecionada
+        function openEditModalWithData(index) {
+            const rowData = filteredRows[index];
+
+            document.getElementById("editId").value = rowData[0]; // Preenche o campo ID (não editável)
+            document.getElementById("editMarca").value = rowData[1];
+            document.getElementById("editOQue").value = rowData[2];
+            document.getElementById("editComo").value = rowData[3];
+            document.getElementById("editQuem").value = rowData[4];
+
+            // Formata a data no formato dd/mm/aa para o campo 'Quando'
+            const whenDate = formatForInputDate(rowData[5]);
+            document.getElementById("editQuando").value = whenDate;
+
+            openEditModal();
+        }
+
+        // Função para formatar a data para o formato dd/mm/aa (campo de input date)
+        function formatForInputDate(dateString) {
+            if (!dateString) return "";
+            const [day, month, year] = dateString.split('/'); // Supondo que a data esteja no formato dd/mm/yyyy
+            const shortYear = year.slice(-2); // Pega os dois últimos dígitos do ano
+            return `${day}/${month}/${shortYear}`;
+        }
+
         // Visualiza uma linha
         function viewRow(index) {
             const rowData = filteredRows[index];
@@ -1276,11 +1255,8 @@
             document.getElementById("viewOQue").textContent = rowData[2];
             document.getElementById("viewComo").textContent = rowData[3];
             document.getElementById("viewQuem").textContent = rowData[4];
-
-            // Formata a data para exibição
             document.getElementById("viewQuando").textContent = formatDateToDisplay(rowData[5]);
             document.getElementById("viewDataRegistro").textContent = formatDateToDisplay(rowData[6]);
-
             openViewModal();
         }
 
@@ -1297,13 +1273,68 @@
         }
 
         // Formata a data pra usar em <input type="date"> (YYYY-MM-DD)
-        function formatDateToInput(dateString) {
+        function formatForInputDate(dateString) {
             if (!dateString) return "";
             const [day, month, year] = dateString.split('/');
             const fullYear = `20${year}`; // Adiciona "20" para anos como "23" -> "2023"
             return `${fullYear}-${month}-${day}`;
         }
 
+        // Salva a edição da ação (ainda não envia para servidor, se quiser enviar, faça outro fetch)
+        function submitEditAction() {
+            const editActionForm = document.getElementById('editActionForm');
+
+            // Recupera os valores dos campos
+            let formData = {
+                id: editActionForm.editId.value,  // ID não editável, mas enviado no formulário
+                marca: editActionForm.editMarca.value,
+                oQue: editActionForm.editOQue.value,
+                como: editActionForm.editComo.value,
+                quem: editActionForm.editQuem.value,
+                quando: editActionForm.editQuando.value
+            };
+
+            // Verifica se algum campo obrigatório está vazio
+            if (!formData.marca || !formData.oQue || !formData.como || !formData.quem || !formData.quando) {
+                showToast("Por favor, preencha todos os campos obrigatórios.");
+                return; // Impede o envio dos dados caso algum campo esteja vazio
+            }
+
+            // Envia a requisição para o Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbz086OfzsHq1mDCEsHTOZ_tBtIaKC6a8uj3ScR_Owqw9EgqfAtJGdPgy-KUHNwI0NrjUw/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    action: 'editRow', // Ação de edição
+                    id: formData.id,  // ID da linha a ser atualizada
+                    marca: formData.marca,
+                    oQue: formData.oQue,
+                    como: formData.como,
+                    quem: formData.quem,
+                    quando: formatDateForInput(formData.quando) // Garantindo o formato correto para o campo de data
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    console.log('Dados editados com sucesso:', response);
+                    closeEditModal();
+                    fetchDataAndRenderTable(); // Atualiza a tabela após editar
+                    showToast("Ação editada com sucesso!");
+                })
+                .catch(error => {
+                    console.error('Erro ao editar:', error);
+                    showToast("Erro ao editar a ação.");
+                });
+        }
+
+        // Função para formatar a data no formato YYYY-MM-DD
+        function formatDateForInput(dateString) {
+            if (!dateString) return ""; // Retorna vazio se a data não for fornecida
+            const [day, month, year] = dateString.split('/');
+            return `${year}-${month}-${day}`; // Retorna no formato YYYY-MM-DD
+        }
         // Filtra a tabela por marca
         function filtrarTabela(marca) {
             // Remove a classe 'selecionado' de todos
@@ -1319,6 +1350,7 @@
             currentPage = 1;
             renderTable(currentPage, marca);
         }
+
         // Carrega dados ao abrir a página
         document.addEventListener("DOMContentLoaded", fetchDataAndRenderTable);
 
@@ -1369,6 +1401,7 @@
                 showToast("Ocorreu um erro ao registrar a ação.");
             });
         }
+
         function markAsCompleted(index) {
             const rowData = filteredRows[index]; // Obtém os dados da linha clicada
             const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
@@ -1447,8 +1480,6 @@
                     });
             }
         }
-
-
     </script>
 </body>
 
