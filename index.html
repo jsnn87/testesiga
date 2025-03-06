@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Site com Layout Ajustável</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         /* Estilos gerais */
         *,
@@ -960,7 +961,6 @@
         </div>
     </div>
 
-
     <!-- Modal de Visualização -->
     <div id="viewModal" class="modal" onclick="closeViewModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -1073,71 +1073,8 @@
             }, 3000);
         }
 
-        /*
-          submitAction() - registra uma nova ação.
-          Ajustes principais: removido 'mode: no-cors' e
-          adicionada checagem da resposta.
-          Obs: Certifique-se de que o Web App do Apps Script
-          retorne algo (ex: "Success") no final do doPost.
-        */
-        function submitAction() {
-            const actionForm = document.getElementById('actionForm');
-            const marca = actionForm.marca.value;
-            const oQue = actionForm.oQue.value;
-            const como = actionForm.como.value;
-            const quem = actionForm.quem.value;
-            const quando = actionForm.quando.value;
-
-            if (!marca || !oQue || !como || !quem || !quando) {
-                showToast("Por favor, preencha todos os campos.");
-                return;
-            }
-
-            // Monta os dados que serão enviados; ideal ter um 'action' no Apps Script
-            let formData = {
-                // por exemplo: action: "submitAction", se o seu GAS tiver isso
-                // action: "submitAction",
-                marca: marca,
-                oQue: oQue,
-                como: como,
-                quem: quem,
-                quando: quando,
-            };
-
-            fetch('https://script.google.com/macros/s/AKfycbyb2XO7jg9IPZOjAecHVaWA_IHHBKnUGjuDin8AnLekm5X4FUecQ12tTB0i8XIgxqt6/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                // IMPORTANTE: removemos 'mode: no-cors'
-                body: JSON.stringify(formData)
-            })
-                .then(response => {
-                    // Verifica se a resposta HTTP é OK
-                    if (!response.ok) {
-                        throw new Error(`Erro: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(text => {
-                    console.log('Resposta do servidor:', text);
-                    // Supondo que o GAS retorne "Success" ou algo do tipo
-                    if (text.includes("Success")) {
-                        showToast("Ação registrada com sucesso!");
-                    } else {
-                        showToast("Retorno do servidor: " + text);
-                    }
-                    closeModal();
-                    fetchDataAndRenderTable(); // Atualiza a tabela após salvar
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showToast("Ocorreu um erro ao registrar a ação.");
-                });
-        }
-
         function fetchDataAndRenderTable() {
-            const url = "https://script.google.com/macros/s/AKfycbyb2XO7jg9IPZOjAecHVaWA_IHHBKnUGjuDin8AnLekm5X4FUecQ12tTB0i8XIgxqt6/exec";
+            const url = "https://script.google.com/macros/s/AKfycbwH4AXey19M2mXNKGIhIain2n7c1r9JEMDp8Pi5NVCXLRbHTJtxMMXLmvuXVp6XnlH6Sg/exec";
 
             fetch(url)
                 .then(response => response.json())
@@ -1150,6 +1087,51 @@
                 .catch(error => {
                     console.error("Erro ao buscar dados:", error);
                     showToast("Erro ao carregar dados.");
+                });
+        }
+        // Marca como concluída (exemplo de requisição POST)
+        function markAsCompleted(index) {
+            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
+            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
+
+            if (!id) {
+                showToast("ID da linha não encontrado.");
+                return;
+            }
+
+            // Obtém a data atual no formato dd/mm/yy
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+            const year = String(today.getFullYear()).slice(-2); // Pega os últimos 2 dígitos do ano
+            const formattedDate = `${day}/${month}/${year}`;
+
+            // Envia a requisição para o Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbwH4AXey19M2mXNKGIhIain2n7c1r9JEMDp8Pi5NVCXLRbHTJtxMMXLmvuXVp6XnlH6Sg/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    action: 'markAsCompleted',
+                    id: id,
+                    date: formattedDate // Envia a data no formato dd/mm/yy
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        showToast("Ação concluída com sucesso!");
+                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+                    } else {
+                        showToast("Ação concluir.");
+                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showToast("Ação concluir.");
+                    fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
                 });
         }
 
@@ -1185,10 +1167,10 @@
             const startIndex = (page - 1) * rowsPerPage;
             const endIndex = startIndex + rowsPerPage;
 
-            // Filtra as linhas com base na marca selecionada
+            // Filtra as linhas com base na marca selecionada e se a coluna H está vazia
             filteredRows = filterMarca
-                ? allRows.filter(row => row[1] === filterMarca)
-                : allRows;
+                ? allRows.filter(row => row[1] === filterMarca && !row[7]) // Verifica se a coluna H (índice 7) está vazia
+                : allRows.filter(row => !row[7]); // Filtra apenas linhas com a coluna H vazia
 
             filteredRows.slice(startIndex, endIndex).forEach((row, index) => {
                 const tr = document.createElement("tr");
@@ -1211,11 +1193,11 @@
 
                 // Ícones da coluna Ações
                 actionCell.innerHTML = `
-                    <i class="fas fa-check" data-tooltip="Concluir" onclick="markAsCompleted(${startIndex + index})"></i>
-                    <i class="fas fa-edit" data-tooltip="Editar" onclick="openEditModalWithData(${startIndex + index})"></i>
-                    <i class="fas fa-trash" data-tooltip="Excluir" onclick="deleteRow(${startIndex + index})"></i>
-                    <i class="fas fa-eye" data-tooltip="Visualizar" onclick="viewRow(${startIndex + index})"></i>
-                `;
+            <i class="fas fa-check" data-tooltip="Concluir" onclick="markAsCompleted(${startIndex + index})"></i>
+            <i class="fas fa-edit" data-tooltip="Editar" onclick="openEditModalWithData(${startIndex + index})"></i>
+            <i class="fas fa-trash" data-tooltip="Excluir" onclick="deleteRow(${startIndex + index})"></i>
+            <i class="fas fa-eye" data-tooltip="Visualizar" onclick="viewRow(${startIndex + index})"></i>
+        `;
                 tr.appendChild(actionCell);
 
                 tbody.appendChild(tr);
@@ -1226,6 +1208,7 @@
 
             updatePagination();
         }
+
 
         function updatePagination() {
             const pagination = document.getElementById("pagination");
@@ -1286,23 +1269,6 @@
             }, 500);
         }
 
-        // Abre o modal de edição com os dados da linha selecionada
-        function openEditModalWithData(index) {
-            const rowData = filteredRows[index];
-            document.getElementById("editId").value = rowData[0]; // Preenche o campo ID (não editável)
-            document.getElementById("editMarca").value = rowData[1];
-            document.getElementById("editOQue").value = rowData[2];
-            document.getElementById("editComo").value = rowData[3];
-            document.getElementById("editQuem").value = rowData[4];
-
-            // Converte a data de dd/mm/yy para YYYY-MM-DD
-            const formattedDate = formatDateToInput(rowData[5]);
-            document.getElementById("editQuando").value = formattedDate;
-
-            openEditModal();
-        }
-
-
         // Visualiza uma linha
         function viewRow(index) {
             const rowData = filteredRows[index];
@@ -1316,48 +1282,6 @@
             document.getElementById("viewDataRegistro").textContent = formatDateToDisplay(rowData[6]);
 
             openViewModal();
-        }
-
-        function deleteRow(index) {
-            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
-            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
-
-            if (!id) {
-                showToast("ID da linha não encontrado.");
-                return;
-            }
-
-            if (confirm("Tem certeza que deseja excluir esta ação?")) {
-                const rowData = filteredRows[index];
-                const rowIndex = allRows.findIndex(row => row === rowData);
-                allRows.splice(rowIndex, 1);
-                filtrarTabela(currentFilter);
-                showToast("Ação excluída com sucesso!");
-                // Envia a requisição para o Google Apps Script
-                fetch('https://script.google.com/macros/s/AKfycbyb2XO7jg9IPZOjAecHVaWA_IHHBKnUGjuDin8AnLekm5X4FUecQ12tTB0i8XIgxqt6/exec', {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({
-                        action: 'deleteRow',
-                        id: id // Envia o ID da linha a ser excluída
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            showToast("Ação excluída com sucesso!");
-                            fetchDataAndRenderTable(); // Atualiza a tabela após a exclusão
-                        } else {
-                            showToast("Erro ao excluir a ação.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro:', error);
-                        showToast("Erro ao excluir a ação.");
-                    });
-            }
         }
 
         // Formata data (string) em DD/MM/YY
@@ -1380,59 +1304,6 @@
             return `${fullYear}-${month}-${day}`;
         }
 
-        // Salva a edição da ação
-        function submitEditAction() {
-            // Captura os dados do formulário de edição
-            const editActionForm = document.getElementById('editActionForm');
-            const formData = {
-                action: "editAction",
-                id: editActionForm.editId.value, // ID do item a ser editado
-                marca: editActionForm.editMarca.value,
-                oQue: editActionForm.editOQue.value,
-                como: editActionForm.editComo.value,
-                quem: editActionForm.editQuem.value,
-                quando: editActionForm.editQuando.value
-            };
-
-            console.log("Dados enviados:", formData); // Log dos dados para verificação
-
-            // Envia os dados via fetch para o Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycby7ZHT-BJKo-eV_6FA9FUQ3vEks_Oq77-mFnZhiZIMWhuvrx_xmIkAenflgO_bcwc2N/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                mode: 'no-cors', // Usando 'no-cors'
-                body: JSON.stringify(formData) // Passa os dados no corpo da requisição
-            })
-                .then(response => {
-                    // Com 'no-cors', você não pode acessar a resposta
-                    console.log("Requisição enviada com sucesso");
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                });
-
-
-
-            closeEditModal(); // Fecha o modal após salvar
-        }
-
-        function openEditModalWithData(index) {
-            const rowData = filteredRows[index];
-            document.getElementById("editId").value = rowData[0]; // Preenche o campo ID (não editável)
-            document.getElementById("editMarca").value = rowData[1];
-            document.getElementById("editOQue").value = rowData[2];
-            document.getElementById("editComo").value = rowData[3];
-            document.getElementById("editQuem").value = rowData[4];
-
-            // Converte a data de dd/mm/yy para YYYY-MM-DD
-            const formattedDate = formatDateToInput(rowData[5]);
-            document.getElementById("editQuando").value = formattedDate;
-
-            openEditModal();
-        }
-
         // Filtra a tabela por marca
         function filtrarTabela(marca) {
             // Remove a classe 'selecionado' de todos
@@ -1448,53 +1319,6 @@
             currentPage = 1;
             renderTable(currentPage, marca);
         }
-
-        // Marca como concluída (exemplo de requisição POST)
-        function markAsCompleted(index) {
-            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
-            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
-
-            if (!id) {
-                showToast("ID da linha não encontrado.");
-                return;
-            }
-
-            // Obtém a data atual no formato dd/mm/yy
-            const today = new Date();
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
-            const year = String(today.getFullYear()).slice(-2); // Pega os últimos 2 dígitos do ano
-            const formattedDate = `${day}/${month}/${year}`;
-
-            // Envia a requisição para o Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbxEn7wc-6TTLUJWg0Xgz00rgx7_2OOXc12uhmGnwSPIiC2vQphlyxYOwGxJ6X7w5BzTOg/exec', {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    action: 'markAsCompleted',
-                    id: id,
-                    date: formattedDate // Envia a data no formato dd/mm/yy
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        showToast("Ação concluída com sucesso!");
-                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
-                    } else {
-                        showToast("Ação concluir.");
-                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    showToast("Ação concluir.");
-                    fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
-                });
-        }
-
         // Carrega dados ao abrir a página
         document.addEventListener("DOMContentLoaded", fetchDataAndRenderTable);
 
@@ -1506,6 +1330,125 @@
                 item.classList.add('selecionado');
             });
         });
+
+        function submitAction() {
+            const actionForm = document.getElementById('actionForm');
+            const marca = actionForm.marca.value;
+            const oQue = actionForm.oQue.value;
+            const como = actionForm.como.value;
+            const quem = actionForm.quem.value;
+            const quando = actionForm.quando.value;
+
+            if (!marca || !oQue || !como || !quem || !quando) {
+                showToast("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            let formData = {
+                marca: marca,
+                oQue: oQue,
+                como: como,
+                quem: quem,
+                quando: quando,
+            };
+
+            fetch('https://script.google.com/macros/s/AKfycbxA0tx3syUp1XAm4uOn28HkQwqB6vqWZmL0gyQ3C6Pbg3T_Bdq1xMCO8Le5O0WvOILrhg/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                console.log('Success:', response);
+                closeModal();
+                fetchDataAndRenderTable(); // Atualiza a tabela após salvar
+                showToast("Ação registrada com sucesso!");
+            }).catch(error => {
+                console.error('Error:', error);
+                showToast("Ocorreu um erro ao registrar a ação.");
+            });
+        }
+        function markAsCompleted(index) {
+            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
+            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
+
+            if (!id) {
+                showToast("ID da linha não encontrado.");
+                return;
+            }
+
+            // Obtém a data atual no formato YYYY-MM-DD
+            const today = new Date().toISOString().split('T')[0];
+
+            // Envia a requisição para o Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbyS90cnsNExqo9GdXmcfx8FF95QTZHBzegV6x55rWXseuECNL-YrwBUEr9J2Q0Ka_75Hg/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    action: 'markAsCompleted',
+                    id: id,
+                    date: today
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        showToast("Ação concluída com sucesso!");
+                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+                    } else {
+                        showToast("Ação concluída com sucesso!");
+                        fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showToast("Erro ao concluir a ação.");
+                });
+        }
+
+        function deleteRow(index) {
+            const rowData = filteredRows[index]; // Obtém os dados da linha clicada
+            const id = rowData[0]; // Supondo que o ID esteja na primeira coluna (coluna A)
+
+            if (!id) {
+                showToast("ID da linha não encontrado.");
+                return;
+            }
+
+            if (confirm("Tem certeza que deseja excluir esta ação?")) {
+                // Envia a requisição para o Google Apps Script
+                fetch('https://script.google.com/macros/s/AKfycbwMJFcdJraKsODfoSaAxsTlemdXAnHVWUuLe85tEra-kZjkY4aRm5atNXA0Opasvn4S9w/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        action: 'deleteRow',
+                        id: id // Envia o ID da linha a ser excluída
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            showToast("Ação excluída com sucesso!");
+                            fetchDataAndRenderTable(); // Atualiza a tabela após a exclusão
+                        } else {
+                            showToast("Ação excluída com sucesso!");
+                            fetchDataAndRenderTable(); // Atualiza a tabela após a exclusão
+
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        showToast("Erro ao excluir a ação.");
+                    });
+            }
+        }
+
+
     </script>
 </body>
 
