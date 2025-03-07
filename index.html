@@ -7,6 +7,7 @@
     <title>Site com Layout Ajustável</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
     <style>
         /* Estilos gerais */
         *,
@@ -95,6 +96,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 1002
         }
 
         nav ul {
@@ -778,6 +780,227 @@
             cursor: not-allowed;
             /* Cursor de "não permitido" */
         }
+
+        /* Estilos para o Lottie Player */
+        .lottie-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Fundo branco com 80% de transparência */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .lottie-container.show {
+            display: flex;
+        }
+        /* Container da página Ação */
+    .acao-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(128, 128, 128, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Sidebar dentro do container Ação */
+    .acao-sidebar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: auto;
+      background: transparent;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 10px;
+    }
+
+    .acao-sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .acao-sidebar ul li {
+      position: relative;
+      width: 100px;
+      height: 60px;
+      cursor: pointer;
+      background: crimson;
+      text-transform: uppercase;
+      transition: all 0.4s ease-out;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0 !important;
+    }
+
+    /* Estado selecionado no sidebar */
+    .acao-sidebar ul li.selecionado {
+      background-color: #333 !important; /* Cinza escuro */
+    }
+
+    .acao-sidebar ul li.selecionado img {
+      filter: white /* Inverte a cor da imagem para branco */
+    }
+
+    /* Estilos para os logos das marcas */
+    .acao-sidebar ul li img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      transition: opacity 0.4s ease-out;
+    }
+
+    /* Arredondar bordas específicas */
+    .acao-sidebar ul li:first-child {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    .acao-sidebar ul li:last-child {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    /* Esconde o logo ao passar o mouse */
+    .acao-sidebar ul li:hover img {
+      opacity: 0;
+    }
+
+    /* Remove estilos desnecessários */
+    .acao-sidebar ul li:after {
+      position: absolute;
+      background: white;
+      color: crimson;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transform: translateY(0);
+      transition: all 0.4s ease-out;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .acao-sidebar ul li:nth-child(1):after {
+      content: "ASICS";
+    }
+
+    .acao-sidebar ul li:nth-child(2):after {
+      content: "FILA";
+    }
+
+    .acao-sidebar ul li:nth-child(3):after {
+      content: "UMBRO";
+    }
+
+    .acao-sidebar ul li:hover {
+      background: transparent;
+    }
+
+    .acao-sidebar ul li:hover:after {
+      opacity: 1;
+      transform: translateY(-100%);
+    }
+
+    /* Estilos da tabela */
+    #tabela-producao {
+      flex: 1;
+      overflow-y: auto;
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      font-size: px;
+    }
+
+    th,
+    table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    th {
+      background-color: crimson;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Fixar o título da tabela */
+    .fixed-title {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 1;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    /* Ícone de agrupar/desagrupar */
+    .toggle-icon {
+      cursor: pointer;
+      color: #007bff;
+      font-size: 24px;
+    }
+
+    /* Linha de total */
+    .linha-total {
+      font-weight: bold;
+      background-color: #e0e0e0;
+    }
+
+    /* Animação de carregamento */
+    .loading-animation2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.911);
+      z-index: 100;
+    }
+
+    #data-hora-registro {
+      font-size: 14px;
+      color: gray;
+      margin-left: 10px;
+      font-style: italic;
+    }
     </style>
 </head>
 
@@ -879,10 +1102,22 @@
                     <li id="filtroREGISTAR" onclick="openModal()">
                         <div><i class="fas fa-plus-circle"></i></div>
                     </li>
-                    <li id="filtroHISTORICO">
+                    <li id="filtroHISTORICO" onclick="openHistoricoModal()">
                         <div><i class="fas fa-history"></i></div>
                     </li>
                 </ul>
+            </div>
+
+            <!-- Lottie Animation Container para carregamento inicial da tabela -->
+            <div class="lottie-container" id="lottieLoadingContainer">
+                <dotlottie-player src="https://lottie.host/c306cfff-12a7-48cd-a5c4-5bc0f80f6003/6X1VG6ZT4B.lottie"
+                    background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay></dotlottie-player>
+            </div>
+
+            <!-- Lottie Animation Container para outras operações -->
+            <div class="lottie-container" id="lottieOtherContainer">
+                <dotlottie-player src="https://lottie.host/ced89c82-41d6-4a4d-9902-13a0272aefd7/RPhabeUr8d.lottie"
+                    background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay></dotlottie-player>
             </div>
         </div>
     </section>
@@ -1000,8 +1235,59 @@
         </div>
     </div>
 
+    <!-- Modal de Histórico -->
+    <div id="historicoModal" class="modal" onclick="closeHistoricoModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2><i class="fas fa-history"></i> Histórico</h2>
+            </div>
+            <div class="modal-body">
+                <div id="historicoTableContainer"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div id="toast" class="toast"></div>
+
+    <section id="acao" class="page">
+        <div class="acao-container">
+          <span id="data-hora-registro"></span>
+          <h2 class="fixed-title">Acompanhamento Semanal</h2>
+    
+          <!-- Sidebar dentro do container Ação -->
+          <div class="acao-sidebar">
+            <ul>
+              <li id="filtroASICS" onclick="filtrarTabela2('ASICS')">
+                <div>
+                  <img src="https://i.postimg.cc/gkYJWM1C/logo-das-marcas-page-0003-removebg-preview.png" alt="ASICS">
+                </div>
+              </li>
+              <li id="filtroFILA" onclick="filtrarTabela2('FILA')">
+                <div>
+                  <img src="https://i.postimg.cc/HW0xFGv0/logo-das-marcas-page-0001-removebg-preview.png" alt="FILA">
+                </div>
+              </li>
+              <li id="filtroUMBRO" onclick="filtrarTabela2('UMBRO')">
+                <div>
+                  <img src="https://i.postimg.cc/nrxLMTrQ/logo-das-marcas-page-0002-removebg-preview-1.png" alt="UMBRO">
+                </div>
+              </li>
+            </ul>
+          </div>
+    
+          <!-- Animação de carregamento -->
+          <div class="loading-animation2">
+            <dotlottie-player  src="https://lottie.host/c306cfff-12a7-48cd-a5c4-5bc0f80f6003/6X1VG6ZT4B.lottie"
+              background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay>
+            </dotlottie-player>
+          </div>
+    
+          <!-- Tabela de Acompanhamento Semanal -->
+          <div id="tabela-producao"></div>
+        </div>
+      </section>
+
     <script>
         let allRows = []; // Armazena todas as linhas da tabela
         let tableHeaders = []; // Armazena os cabeçalhos da tabela
@@ -1029,6 +1315,7 @@
         var modal = document.getElementById("myModal");
         var editModal = document.getElementById("editModal");
         var viewModal = document.getElementById("viewModal");
+        var historicoModal = document.getElementById("historicoModal");
 
         function openModal() {
             modal.style.display = "block";
@@ -1064,6 +1351,15 @@
             viewModal.style.display = "none";
         }
 
+        function openHistoricoModal() {
+            renderHistoricoTable();
+            historicoModal.style.display = "block";
+        }
+
+        function closeHistoricoModal() {
+            historicoModal.style.display = "none";
+        }
+
         function showToast(message) {
             const toast = document.getElementById("toast");
             toast.textContent = message;
@@ -1073,8 +1369,17 @@
             }, 3000);
         }
 
-        function fetchDataAndRenderTable() {
-            const url = "https://script.google.com/macros/s/AKfycbwH4AXey19M2mXNKGIhIain2n7c1r9JEMDp8Pi5NVCXLRbHTJtxMMXLmvuXVp6XnlH6Sg/exec";
+        function fetchDataAndRenderTable(isInitialLoad = false) {
+            const url = "https://script.google.com/macros/s/AKfycbz086OfzsHq1mDCEsHTOZ_tBtIaKC6a8uj3ScR_Owqw9EgqfAtJGdPgy-KUHNwI0NrjUw/exec";
+
+            // Exibe a animação Lottie de carregamento apenas no carregamento inicial
+            if (isInitialLoad) {
+                const lottieLoadingContainer = document.getElementById('lottieLoadingContainer');
+                lottieLoadingContainer.classList.add('show');
+            } else {
+                const lottieOtherContainer = document.getElementById('lottieOtherContainer');
+                lottieOtherContainer.classList.add('show');
+            }
 
             fetch(url)
                 .then(response => response.json())
@@ -1087,6 +1392,16 @@
                 .catch(error => {
                     console.error("Erro ao buscar dados:", error);
                     showToast("Erro ao carregar dados.");
+                })
+                .finally(() => {
+                    // Oculta a animação Lottie após o carregamento
+                    if (isInitialLoad) {
+                        const lottieLoadingContainer = document.getElementById('lottieLoadingContainer');
+                        lottieLoadingContainer.classList.remove('show');
+                    } else {
+                        const lottieOtherContainer = document.getElementById('lottieOtherContainer');
+                        lottieOtherContainer.classList.remove('show');
+                    }
                 });
         }
 
@@ -1162,6 +1477,72 @@
             container.appendChild(table);
 
             updatePagination();
+        }
+
+        function renderHistoricoTable() {
+            const container = document.querySelector("#historicoTableContainer");
+            container.innerHTML = "";
+
+            const table = document.createElement("table");
+            table.classList.add("data-table");
+
+            // Cria o cabeçalho da tabela
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+
+            // Adiciona as colunas de A a G (7 colunas)
+            for (let i = 0; i < 7; i++) {
+                const th = document.createElement("th");
+                th.textContent = tableHeaders[i] || `Coluna ${String.fromCharCode(65 + i)}`; // A, B, C, D, E, F, G
+                headerRow.appendChild(th);
+            }
+
+            // Adiciona a coluna de ações
+            const actionHeader = document.createElement("th");
+            actionHeader.textContent = "Ações";
+            headerRow.appendChild(actionHeader);
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Cria o corpo da tabela
+            const tbody = document.createElement("tbody");
+
+            // Filtra as linhas com base na marca selecionada e se a coluna H está preenchida
+            const historicoRows = currentFilter
+                ? allRows.filter(row => row[1] === currentFilter && row[7]) // Verifica se a coluna H (índice 7) está preenchida
+                : allRows.filter(row => row[7]); // Filtra apenas linhas com a coluna H preenchida
+
+            historicoRows.forEach((row, index) => {
+                const tr = document.createElement("tr");
+
+                // Adiciona as colunas de A a G
+                for (let i = 0; i < 7; i++) {
+                    const td = document.createElement("td");
+                    if (i === 5 || i === 6) {
+                        // Colunas que possam ser datas
+                        td.textContent = formatDateToDisplay(row[i]) || ""; // Formata a data para exibição
+                    } else {
+                        td.textContent = row[i] || "";
+                    }
+                    tr.appendChild(td);
+                }
+
+                // Adiciona a coluna de ações
+                const actionCell = document.createElement("td");
+                actionCell.classList.add("action-column");
+
+                // Ícones da coluna Ações
+                actionCell.innerHTML = `
+            <i class="fas fa-eye" data-tooltip="Visualizar" onclick="viewRow(${index})"></i>
+        `;
+                tr.appendChild(actionCell);
+
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            container.appendChild(table);
         }
 
         function updatePagination() {
@@ -1300,6 +1681,10 @@
                 return; // Impede o envio dos dados caso algum campo esteja vazio
             }
 
+            // Exibe a animação Lottie para outras operações
+            const lottieOtherContainer = document.getElementById('lottieOtherContainer');
+            lottieOtherContainer.classList.add('show');
+
             // Envia a requisição para o Google Apps Script
             fetch('https://script.google.com/macros/s/AKfycbz086OfzsHq1mDCEsHTOZ_tBtIaKC6a8uj3ScR_Owqw9EgqfAtJGdPgy-KUHNwI0NrjUw/exec', {
                 method: 'POST',
@@ -1326,7 +1711,10 @@
                 .catch(error => {
                     console.error('Erro ao editar:', error);
                     showToast("Erro ao editar a ação.");
-                });
+                }).finally(() => {
+                // Oculta a animação Lottie após o processo
+                lottieOtherContainer.classList.remove('show');
+            });
         }
 
         // Função para formatar a data no formato YYYY-MM-DD
@@ -1352,7 +1740,9 @@
         }
 
         // Carrega dados ao abrir a página
-        document.addEventListener("DOMContentLoaded", fetchDataAndRenderTable);
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchDataAndRenderTable(true); // Carregamento inicial da tabela
+        });
 
         // Interação com o sidebar interno "registro-sidebar"
         const registroSidebarItems = document.querySelectorAll('.registro-sidebar ul li');
@@ -1384,6 +1774,10 @@
                 quando: quando,
             };
 
+            // Exibe a animação Lottie para outras operações
+            const lottieOtherContainer = document.getElementById('lottieOtherContainer');
+            lottieOtherContainer.classList.add('show');
+
             fetch('https://script.google.com/macros/s/AKfycbxA0tx3syUp1XAm4uOn28HkQwqB6vqWZmL0gyQ3C6Pbg3T_Bdq1xMCO8Le5O0WvOILrhg/exec', {
                 method: 'POST',
                 mode: 'no-cors',
@@ -1399,6 +1793,9 @@
             }).catch(error => {
                 console.error('Error:', error);
                 showToast("Ocorreu um erro ao registrar a ação.");
+            }).finally(() => {
+                // Oculta a animação Lottie após o processo
+                lottieOtherContainer.classList.remove('show');
             });
         }
 
@@ -1413,6 +1810,10 @@
 
             // Obtém a data atual no formato YYYY-MM-DD
             const today = new Date().toISOString().split('T')[0];
+
+            // Exibe a animação Lottie para outras operações
+            const lottieOtherContainer = document.getElementById('lottieOtherContainer');
+            lottieOtherContainer.classList.add('show');
 
             // Envia a requisição para o Google Apps Script
             fetch('https://script.google.com/macros/s/AKfycbyS90cnsNExqo9GdXmcfx8FF95QTZHBzegV6x55rWXseuECNL-YrwBUEr9J2Q0Ka_75Hg/exec', {
@@ -1434,11 +1835,16 @@
                     } else {
                         showToast("Ação concluída com sucesso!");
                         fetchDataAndRenderTable(); // Atualiza a tabela após a conclusão
+
                     }
                 })
                 .catch(error => {
                     console.error('Erro:', error);
                     showToast("Erro ao concluir a ação.");
+                })
+                .finally(() => {
+                    // Oculta a animação Lottie após o processo
+                    lottieOtherContainer.classList.remove('show');
                 });
         }
 
@@ -1452,6 +1858,10 @@
             }
 
             if (confirm("Tem certeza que deseja excluir esta ação?")) {
+                // Exibe a animação Lottie para outras operações
+                const lottieOtherContainer = document.getElementById('lottieOtherContainer');
+                lottieOtherContainer.classList.add('show');
+
                 // Envia a requisição para o Google Apps Script
                 fetch('https://script.google.com/macros/s/AKfycbwMJFcdJraKsODfoSaAxsTlemdXAnHVWUuLe85tEra-kZjkY4aRm5atNXA0Opasvn4S9w/exec', {
                     method: 'POST',
@@ -1477,9 +1887,263 @@
                     .catch(error => {
                         console.error('Erro:', error);
                         showToast("Erro ao excluir a ação.");
+                    })
+                    .finally(() => {
+                        // Oculta a animação Lottie após o processo
+                        lottieOtherContainer.classList.remove('show');
                     });
             }
         }
+        let dadosTabela = []; // Variável global para armazenar os dados da tabela
+    let cabecalho = []; // Variável global para armazenar o cabeçalho da tabela
+
+    // Função para carregar os dados da API do Google Apps Script
+    async function carregarDadosPlanilha() {
+      const url = "https://script.google.com/macros/s/AKfycbwESLf8Xf98nhKuSM9xwDBg0PUdnWfISKSRydtUOHh4po135_d6zmpWC-AFee2N4UiMEw/exec"; // URL do Web App
+
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        dadosTabela = data; // Armazena os dados na variável global
+        cabecalho = Object.keys(data[0]); // Armazena o cabeçalho
+        console.log("Dados da API:", dadosTabela); // Debug
+        criarTabelaComSubtotal(dadosTabela); // Cria a tabela com subtotais
+
+      } catch (error) {
+        console.error("Erro ao carregar os dados da API:", error);
+
+        // Exibe uma mensagem de erro no container da tabela
+        const containerTabela = document.getElementById("tabela-producao");
+        containerTabela.innerHTML = `<p style="color: red; text-align: center;">Erro ao carregar os dados. Por favor, tente novamente mais tarde.</p>`;
+      } finally {
+        // Remove a animação de carregamento
+        const loadingAnimation = document.querySelector(".loading-animation2");
+        if (loadingAnimation) {
+          loadingAnimation.style.display = "none";
+        }
+      }
+    }
+
+    // Função para carregar os dados da planilha
+    async function carregarDadosPlanilha2() {
+      const url = "https://script.google.com/macros/s/AKfycbz6wo1LkiwLOInDyNJA0LAx0NtuMmVQpDr4jOdhPS0w0mcd3SxLbiSMopwqySG9lfg5Dw/exec"; // URL do Web App
+
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Dados da API:", data); // Debug
+
+        // Exibir a data e hora ao lado do título
+        const dataHoraElement = document.getElementById("data-hora-registro");
+        if (dataHoraElement && data.lastUpdated) {
+          const dataFormatada = new Date(data.lastUpdated).toLocaleString(); // Formata a data e hora
+          dataHoraElement.textContent = `Última atualização: ${dataFormatada}`;
+        }
+
+      } catch (error) {
+        console.error("Erro ao carregar os dados da API:", error);
+
+        // Exibe uma mensagem de erro
+        const dataHoraElement = document.getElementById("data-hora-registro");
+        if (dataHoraElement) {
+          dataHoraElement.textContent = "Erro ao carregar a data e hora.";
+          dataHoraElement.style.color = "red";
+        }
+      }
+    }
+
+    // Função para criar a tabela com subtotais e total geral
+    function criarTabelaComSubtotal(dados) {
+      if (!dados || dados.length === 0) {
+        const containerTabela = document.getElementById("tabela-producao");
+        containerTabela.innerHTML = `<p style="color: gray; text-align: center;">Nenhum dado disponível para exibição.</p>`;
+        return;
+      }
+
+      const tabela = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+
+      // Cabeçalho da tabela
+      const trHead = document.createElement("tr");
+      const thToggle = document.createElement("th"); // Coluna para o ícone de toggle
+      thToggle.textContent = "Sub"; // Deixar vazio para o ícone
+      trHead.appendChild(thToggle);
+      cabecalho.forEach(coluna => {
+        const th = document.createElement("th");
+        th.textContent = coluna;
+        trHead.appendChild(th);
+      });
+      thead.appendChild(trHead);
+      tabela.appendChild(thead);
+
+      let totalGeral = {}; // Objeto para armazenar o total geral por coluna numérica
+
+      // Agrupa os dados por semana
+      const dadosPorSemana = {};
+      dados.forEach(linha => {
+        const semana = linha["Semana"];
+        if (!dadosPorSemana[semana]) {
+          dadosPorSemana[semana] = [];
+        }
+        dadosPorSemana[semana].push(linha);
+      });
+
+      // Preenche a tabela com os dados e subtotais
+      Object.keys(dadosPorSemana).sort((a, b) => a - b).forEach(semana => {
+        const linhasDaSemana = dadosPorSemana[semana];
+
+        // Linha de subtotal
+        const trSubtotal = document.createElement("tr");
+        trSubtotal.setAttribute("data-semana", semana);
+        trSubtotal.style.fontWeight = "bold";
+        trSubtotal.style.backgroundColor = "#f0f0f0";
+
+        const tdToggle = document.createElement("td");
+        const iconToggle = document.createElement("i");
+        iconToggle.classList.add("fas", "fa-angle-down", "toggle-icon");
+        iconToggle.onclick = () => toggleSemana(semana);
+        tdToggle.appendChild(iconToggle);
+        trSubtotal.appendChild(tdToggle);
+
+        cabecalho.forEach(coluna => {
+          const td = document.createElement("td");
+          if (coluna === "Semana") {
+            td.textContent = `Sem  ${semana}`;
+          } else if (!isNaN(parseFloat(linhasDaSemana[0][coluna]))) {
+            // Soma os valores da coluna se forem numéricos
+            const subtotal = linhasDaSemana.reduce((acc, linha) => acc + parseFloat(linha[coluna] || 0), 0);
+            td.textContent = Math.round(subtotal); // Exibe sem casas decimais
+            totalGeral[coluna] = (totalGeral[coluna] || 0) + subtotal; // Acumula para o total geral
+          } else {
+            td.textContent = "";
+          }
+          trSubtotal.appendChild(td);
+        });
+        tbody.appendChild(trSubtotal);
+
+        // Linhas da semana (ocultas por padrão)
+        linhasDaSemana.forEach(linha => {
+          const tr = document.createElement("tr");
+          tr.setAttribute("data-semana", semana);
+          tr.style.display = "none"; // Oculta as linhas detalhadas por padrão
+
+          const tdEmpty = document.createElement("td");
+          tdEmpty.textContent = ""; // Deixar vazio para alinhar com o ícone
+          tr.appendChild(tdEmpty);
+
+          cabecalho.forEach(coluna => {
+            const td = document.createElement("td");
+            if (!isNaN(parseFloat(linha[coluna]))) {
+              td.textContent = Math.round(linha[coluna]); // Exibe sem casas decimais
+            } else {
+              td.textContent = linha[coluna];
+            }
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      });
+
+      // Linha de total geral
+      const trTotal = document.createElement("tr");
+      trTotal.classList.add("linha-total");
+
+      const tdVazio = document.createElement("td");
+      tdVazio.colSpan = 4; // Ocupa quatro colunas (ícone + "Semana" + "Marcas" + "Modelos")
+      tdVazio.textContent = "Total Geral";
+      trTotal.appendChild(tdVazio);
+
+      cabecalho.forEach(coluna => {
+        if (coluna !== "Semana" && coluna !== "Marcas" && coluna !== "Modelos" && !isNaN(parseFloat(totalGeral[coluna]))) {
+          const td = document.createElement("td");
+          td.textContent = Math.round(totalGeral[coluna]); // Exibe sem casas decimais
+          trTotal.appendChild(td);
+        }
+      });
+
+      tbody.appendChild(trTotal); // Adiciona a linha de total geral
+
+      tabela.appendChild(tbody);
+
+      // Adicionar a tabela ao container
+      const containerTabela = document.getElementById("tabela-producao");
+      containerTabela.innerHTML = ""; // Limpa o conteúdo anterior
+      containerTabela.appendChild(tabela);
+    }
+
+    // Função para alternar o estado de exibição das linhas de uma semana
+    function toggleSemana(semana) {
+      const linhas = document.querySelectorAll(`[data-semana="${semana}"]`);
+      const primeiroElemento = linhas[0]; // Subtotal
+      const iconeToggle = primeiroElemento.querySelector(".toggle-icon");
+
+      linhas.forEach((linha, index) => {
+        if (index > 0) { // Ignorar a linha de subtotal
+          if (linha.style.display === "none") {
+            linha.style.display = "table-row";
+            iconeToggle.classList.remove("fa-angle-up");
+            iconeToggle.classList.add("fa-angle-down");
+          } else {
+            linha.style.display = "none";
+            iconeToggle.classList.remove("fa-angle-down");
+            iconeToggle.classList.add("fa-angle-up");
+          }
+        }
+      });
+    }
+
+    // Função para filtrar a tabela
+    function filtrarTabela2(filtro) {
+      // Filtra os dados com base na coluna "Marcas"
+      const dadosFiltrados = dadosTabela.filter(linha => linha["Marcas"] === filtro);
+      console.log("Dados filtrados:", dadosFiltrados); // Debug
+
+      // Recria a tabela com os dados filtrados
+      criarTabelaComSubtotal(dadosFiltrados);
+
+      // Remove a classe 'selecionado' de todos os blocos
+      document.querySelectorAll('.acao-sidebar ul li').forEach(item => {
+        item.classList.remove('selecionado');
+      });
+
+      // Adiciona a classe 'selecionado' ao bloco clicado
+      const filtroElement = document.getElementById('filtro' + filtro);
+      if (filtroElement) {
+        filtroElement.classList.add('selecionado');
+      }
+    }
+
+    // Adiciona um evento de clique para cada item do menu
+    document.addEventListener('DOMContentLoaded', function () {
+      const menuItems = document.querySelectorAll('.acao-sidebar ul li');
+
+      menuItems.forEach(item => {
+        item.addEventListener('click', function () {
+          // Remover a classe 'selecionado' de todos os itens
+          menuItems.forEach(menuItem => {
+            menuItem.classList.remove('selecionado');
+          });
+
+          // Adicionar a classe 'selecionado' ao item clicado
+          this.classList.add('selecionado');
+        });
+      });
+
+      // Carrega os dados da planilha ao carregar a página
+      carregarDadosPlanilha();
+      carregarDadosPlanilha2();
+    });
     </script>
 </body>
 
