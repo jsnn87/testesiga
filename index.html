@@ -71,6 +71,10 @@
             flex: 2.5;
             font-size: 12px;
             text-align: center;
+            display: block;
+            flex-direction: column;
+            align-items: center;
+            padding: 3%; /* Padding de 3% */
         }
 
         .container4 {
@@ -298,7 +302,7 @@
             width: auto;
             min-width: 100%;
             border-collapse: collapse;
-            font-size: 20px;
+            font-size: 16px;
             table-layout: auto;
         }
 
@@ -306,9 +310,10 @@
         .dynamic-table td {
             border: 1px solid #ddd;
             padding: 0;
+            gap: 10px;
             text-align: center;
             white-space: nowrap;
-            height: 60px;
+            height: 40px;
         }
 
         .dynamic-table th {
@@ -363,13 +368,13 @@
 
         /* Ajustes específicos para a coluna de frequência */
         .dynamic-table th.total-header {
-            width: 120px;
-            min-width: 120px;
+            width: 100px;
+            min-width: 100px;
         }
 
         .dynamic-table td.percentage-cell {
-            width: 120px;
-            min-width: 120px;
+            width: 100px;
+            min-width: 100px;
             padding: 0 !important;
         }
 
@@ -396,8 +401,8 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            font-size: 18px;
-            padding: 5px 0;
+            font-size: 16px;
+            padding: 0px 0;
         }
 
         .percent-red {
@@ -489,13 +494,13 @@
         .icone-check {
             color: #28a745;
             font-weight: bold;
-            font-size: 26px;
+            font-size: 20px;
         }
 
         .icone-x {
             color: #dc3545;
             font-weight: bold;
-            font-size: 26px;
+            font-size: 20px;
         }
          /* Estilos para a lista de setores */
          #setoresList {
@@ -518,7 +523,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px; /* Tamanho da fonte ajustado para 14px */
+            font-size: 16px; /* Tamanho da fonte ajustado para 14px */
             word-wrap: break-word; /* Quebra de linha para textos longos */
             white-space: normal; /* Garante que o texto quebre a linha corretamente */
             margin-left: 0;
