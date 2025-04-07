@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,6 +111,7 @@
             overflow: hidden;
             width: 100%;
             height: 100%;
+            min-height: 400px;
             padding: 10px;
             position: relative;
         }
@@ -125,9 +127,9 @@
             background: rgba(255, 255, 255, 0.9);
             padding: 8px 12px;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .filters-container select {
             padding: 6px 10px;
             border-radius: 5px;
@@ -136,7 +138,7 @@
             font-size: 12px;
             min-width: 140px;
         }
-        
+
         .filters-container label {
             font-size: 12px;
             font-weight: bold;
@@ -254,9 +256,17 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .container4 h2 {
@@ -277,24 +287,28 @@
 
         .table-wrapper {
             width: 100%;
-            height: calc(100% - 40px);
+            height: 100%;
             overflow: auto;
-            margin-top: 40px;
+            margin-top: 10px;
+            flex: 1;
+            min-height: 300px;
         }
 
         .dynamic-table {
             width: auto;
             min-width: 100%;
             border-collapse: collapse;
-            font-size: 16px;
+            font-size: 20px;
             table-layout: auto;
         }
 
-        .dynamic-table th, .dynamic-table td {
+        .dynamic-table th,
+        .dynamic-table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 0;
             text-align: center;
             white-space: nowrap;
+            height: 60px;
         }
 
         .dynamic-table th {
@@ -323,15 +337,20 @@
             position: sticky;
             left: 0;
             z-index: 15;
+            min-width: auto;
+            width: auto;
+            white-space: nowrap;
         }
 
         .setor-cell {
             text-align: left !important;
-            font-weight: bold;
             background-color: #f2f2f2 !important;
             position: sticky;
             left: 0;
             z-index: 5;
+            min-width: auto;
+            width: auto;
+            white-space: nowrap;
         }
 
         .presente {
@@ -342,61 +361,83 @@
             background-color: #f8d7da;
         }
 
-        .percentage-cell {
-            font-weight: bold;
-            font-size: 16px;
-            text-align: center;
+        /* Ajustes específicos para a coluna de frequência */
+        .dynamic-table th.total-header {
+            width: 120px;
+            min-width: 120px;
+        }
+
+        .dynamic-table td.percentage-cell {
+            width: 120px;
+            min-width: 120px;
             padding: 0 !important;
-            width: 70px;
-        }
-
-        .percent-red {
-            background-color: #f8d7da;
-            color: #721c24;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .percent-yellow {
-            background-color: #fff3cd;
-            color: #856404;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .percent-green {
-            background-color: #d4edda;
-            color: #155724;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .percent-blue {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
         .total-header {
             background-color: crimson !important;
             color: white !important;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            /* Aumentei o z-index para garantir que fique acima dos outros cabeçalhos */
+        }
+
+        .percentage-container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .percentage-row {
-            height: 100%;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 25px 10px;
+            width: 100%;
+            height: 100%;
+            font-size: 18px;
+            padding: 5px 0;
+        }
+
+        .percent-red {
+            background-color: #f3071a;
+            color: white;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .percent-yellow {
+            background-color: #f7be04;
+            color: white;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .percent-green {
+            background-color: #00973a;
+            color: white;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .percent-blue {
+            background-color: #069bf1;
+            color: white;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .loading {
@@ -411,8 +452,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .barcode-field {
@@ -440,20 +486,54 @@
             color: crimson;
         }
 
-        /* Estilos para os ícones */
         .icone-check {
             color: #28a745;
             font-weight: bold;
-            font-size: 24px;
+            font-size: 26px;
         }
 
         .icone-x {
             color: #dc3545;
             font-weight: bold;
-            font-size: 24px;
+            font-size: 26px;
+        }
+         /* Estilos para a lista de setores */
+         #setoresList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 5px; /* Espaçamento entre os itens */
+            padding: 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        #setoresList li {
+            width: calc(50% - 5px); /* Cada item ocupa 50% da largura, considerando o gap reduzido */
+            background-color: #f2f2f2;
+            padding: 15px; /* Padding ajustado para 15px */
+            border-radius: 5px;
+            text-align: left;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px; /* Tamanho da fonte ajustado para 14px */
+            word-wrap: break-word; /* Quebra de linha para textos longos */
+            white-space: normal; /* Garante que o texto quebre a linha corretamente */
+            margin-left: 0;
+            margin-right: 0; /* Remove o espaço nas laterais */
+            font-weight: normal; /* Remove o negrito */
+        }
+
+        /* Setor pintado de verde */
+        .setor-verde {
+            background-color: #28a745 !important; /* Cor verde */
+            color: white; /* Cor do texto para contraste */
         }
     </style>
 </head>
+
 <body>
     <nav>
         <ul>
@@ -489,6 +569,7 @@
                         </div>
                         <div class="container container3">
                             <h2>Presença do dia</h2>
+                            <ul id="setoresList"></ul> 
                         </div>
                         <div class="container container4">
                             <h2>Apresentação do dia</h2>
@@ -514,6 +595,7 @@
                                 <div>
                                     <label for="turnoFilter">Turno:</label>
                                     <select id="turnoFilter">
+                                        <option value="Todos">Todos</option>
                                         <option value="A" selected>A</option>
                                         <option value="B">B</option>
                                     </select>
@@ -548,11 +630,16 @@
     </section>
 
     <script>
+
+
+
+
+/////////////////////////////////////////////////////////////////////// HISTORICO //////////////////////////////////////////////////////////////////////////
         // Variáveis globais
         let allData2 = [];
         let currentMonthFilter = '';
         let currentBrandFilter = 'Asics';
-        let currentTurnoFilter = 'A'; // Turno A selecionado por padrão
+        let currentTurnoFilter = 'A';
         let availableBrands = [];
 
         function showPage(page) {
@@ -580,19 +667,17 @@
         async function loadPresenceData() {
             try {
                 document.getElementById('table-container').innerHTML = '<div class="loading"></div>';
-                
+
                 const response = await fetch('https://script.google.com/macros/s/AKfycbyrQHwDJxexVSvf8zzD1au6_2y-3rnybawYkMFSsNX-rRMt-zUohlucvYYITzFpYWw/exec');
                 const jsonData = await response.json();
-                
+
                 if (jsonData.success && jsonData.data) {
                     allData2 = processData(jsonData.data);
-                    
-                    // Extrai as marcas únicas da API (verificando variações de nome)
+
                     availableBrands = [...new Set(allData2.map(item => {
-                        // Verifica diferentes padrões de nome para marca
                         return item.MARCA || item.Marca || item.marca || 'N/A';
                     }))].filter(brand => brand !== 'N/A').sort();
-                    
+
                     populateFilters();
                     applyFilters();
                 } else {
@@ -611,51 +696,44 @@
                 const year = dateObj.getFullYear();
                 const monthYear = `${year}-${month.toString().padStart(2, '0')}`;
                 const dateStr = dateObj.toISOString().split('T')[0];
-                
-                // Verifica diferentes padrões de nome para marca
+
                 const marca = item.MARCA || item.Marca || item.marca || 'N/A';
-                
+
                 return {
                     ...item,
                     monthYear: monthYear,
                     dateOnly: dateStr,
                     dateObj: dateObj,
-                    marca: marca // Usa o valor encontrado
+                    marca: marca
                 };
             });
         }
 
         function populateFilters() {
-            // Popula filtro de meses
             const monthSet = new Set(allData2.map(item => item.monthYear));
             const monthFilter2 = document.getElementById('monthFilter2');
             monthFilter2.innerHTML = '';
-            
+
             const monthsArray = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
             monthsArray.forEach(monthYear => {
                 const [year, month] = monthYear.split('-');
-                const monthName = new Date(year, month-1, 1).toLocaleDateString('pt-BR', { month: 'long' });
+                const monthName = new Date(year, month - 1, 1).toLocaleDateString('pt-BR', { month: 'long' });
                 const option = document.createElement('option');
                 option.value = monthYear;
                 option.textContent = `${monthName}/${year}`;
                 monthFilter2.appendChild(option);
             });
 
-            // Define o mês atual como padrão
             const currentMonthYear = getCurrentMonthYear();
             currentMonthFilter = monthsArray.includes(currentMonthYear) ? currentMonthYear : monthsArray[0];
             monthFilter2.value = currentMonthFilter;
 
-            // Popula filtro de marcas
             const brandFilter = document.getElementById('brandFilter');
             brandFilter.innerHTML = '';
-            
-            // Verifica se Asics existe nas marcas disponíveis
+
             const asicsExists = availableBrands.includes('Asics');
-            
-            // Seleciona Asics por padrão se existir, caso contrário seleciona a primeira marca
             currentBrandFilter = asicsExists ? 'Asics' : availableBrands[0];
-            
+
             availableBrands.forEach(brand => {
                 const option = document.createElement('option');
                 option.value = brand;
@@ -663,37 +741,30 @@
                 brandFilter.appendChild(option);
             });
 
-            // Define o valor selecionado
             brandFilter.value = currentBrandFilter;
 
-            // Configura o filtro de turno para A como padrão
             const turnoFilter = document.getElementById('turnoFilter');
             turnoFilter.value = currentTurnoFilter;
 
-            // Event listeners para filtros
-            monthFilter2.addEventListener('change', function() {
+            monthFilter2.addEventListener('change', function () {
                 currentMonthFilter = this.value;
                 applyFilters();
             });
 
-            brandFilter.addEventListener('change', function() {
+            brandFilter.addEventListener('change', function () {
                 currentBrandFilter = this.value;
                 applyFilters();
             });
 
-            turnoFilter.addEventListener('change', function() {
+            turnoFilter.addEventListener('change', function () {
                 currentTurnoFilter = this.value;
                 applyFilters();
             });
         }
 
         function applyFilters() {
-            // Filtra por mês
             let filteredData = allData2.filter(item => item.monthYear === currentMonthFilter);
-            
-            // Filtra por marca
             filteredData = filteredData.filter(item => item.marca === currentBrandFilter);
-            
             createTable(filteredData);
         }
 
@@ -705,49 +776,41 @@
         }
 
         function createTable(data) {
-            // Limpa o container da tabela
             const tableContainer = document.getElementById('table-container');
             tableContainer.innerHTML = '';
-            
-            // Verifica se há dados para exibir
+
             if (data.length === 0) {
                 tableContainer.innerHTML = '<p>Nenhum dado disponível para os filtros selecionados.</p>';
                 return;
             }
-            
-            // Agrupa dados por data, turno e setor
+
             const datesGrouped = {};
             const dateSet = new Set();
             const turnoPresence = { A: {}, B: {} };
             const setorTurnoPresence = {};
             const setorCounts = {};
-            
-            // Processa todos os dados para agrupamento
+
             data.forEach(item => {
                 const date = item.dateOnly;
                 const turno = item.Turno;
                 const setor = item.SETOR;
-                
+
                 dateSet.add(date);
-                
-                // Inicializa estruturas se necessário
+
                 if (!datesGrouped[date]) datesGrouped[date] = {};
                 if (!datesGrouped[date][turno]) datesGrouped[date][turno] = {};
                 if (!datesGrouped[date][turno][setor]) {
                     datesGrouped[date][turno][setor] = new Set();
                 }
-                
-                // Adiciona o nome ao conjunto
+
                 datesGrouped[date][turno][setor].add(item.NOME);
-                
-                // Contabiliza presença por turno
+
                 if (turno === 'A' || turno === 'B') {
                     if (!turnoPresence[turno][date]) {
                         turnoPresence[turno][date] = 0;
                     }
                     turnoPresence[turno][date]++;
-                    
-                    // Contabiliza presença por setor e turno
+
                     if (!setorTurnoPresence[setor]) {
                         setorTurnoPresence[setor] = { A: {}, B: {} };
                     }
@@ -756,57 +819,48 @@
                     }
                     setorTurnoPresence[setor][turno][date]++;
                 }
-                
-                // Conta quantos dias cada setor aparece
+
                 if (!setorCounts[setor]) {
                     setorCounts[setor] = { A: 0, B: 0 };
                 }
                 setorCounts[setor][turno]++;
             });
-            
-            // Ordena as datas
+
             const uniqueDates = Array.from(dateSet).sort((a, b) => new Date(a) - new Date(b));
             const allSetores = Object.keys(setorCounts).sort();
-            
-            // Determina quais turnos mostrar com base no filtro
+
             let turnosToShow = [];
             if (currentTurnoFilter === 'Todos') {
                 turnosToShow = ['A', 'B'];
             } else {
                 turnosToShow = [currentTurnoFilter];
             }
-            
-            // Função para formatar a data
+
             const formatDate = (dateStr) => {
                 const [year, month, day] = dateStr.split('-');
                 return `${day}/${month}`;
             };
-            
-            // Função para calcular frequência
+
             const calculateFrequency = (presenceObj, totalDates) => {
                 const presentDays = Object.keys(presenceObj).length;
                 return totalDates > 0 ? Math.round((presentDays / totalDates) * 100) : 0;
             };
-            
+
             const totalDates = uniqueDates.length;
-            
-            // Cria a tabela
+
             const table = document.createElement('table');
             table.className = 'dynamic-table';
-            
-            // Cria o cabeçalho
+
             const thead = document.createElement('thead');
             let headerRow1 = document.createElement('tr');
             let headerRow2 = document.createElement('tr');
-            
-            // Célula do setor
+
             const setorHeader = document.createElement('th');
             setorHeader.rowSpan = 2;
             setorHeader.className = 'setor-header';
             setorHeader.textContent = 'Setor';
             headerRow1.appendChild(setorHeader);
-            
-            // Células de datas (com colspan dinâmico baseado nos turnos visíveis)
+
             uniqueDates.forEach(date => {
                 const dateHeader = document.createElement('th');
                 dateHeader.colSpan = turnosToShow.length;
@@ -814,15 +868,15 @@
                 dateHeader.textContent = formatDate(date);
                 headerRow1.appendChild(dateHeader);
             });
-            
-            // Célula de frequência
+
             const freqHeader = document.createElement('th');
             freqHeader.rowSpan = 2;
             freqHeader.className = 'total-header';
             freqHeader.textContent = 'Frequência';
+            freqHeader.style.backgroundColor = 'crimson'; // Garante a cor mesmo se houver problemas com a classe
+            freqHeader.style.color = 'white';
             headerRow1.appendChild(freqHeader);
-            
-            // Subcabeçalho com turnos (apenas os turnos visíveis)
+
             uniqueDates.forEach(() => {
                 turnosToShow.forEach(turno => {
                     const turnoHeader = document.createElement('th');
@@ -831,75 +885,73 @@
                     headerRow2.appendChild(turnoHeader);
                 });
             });
-            
+
             thead.appendChild(headerRow1);
             thead.appendChild(headerRow2);
             table.appendChild(thead);
-            
-            // Cria o corpo da tabela
+
             const tbody = document.createElement('tbody');
-            
-            // Linhas para cada setor
+
             allSetores.forEach(setor => {
                 const row = document.createElement('tr');
-                
-                // Célula do setor
+
                 const setorCell = document.createElement('td');
                 setorCell.className = 'setor-cell';
                 setorCell.textContent = setor;
                 row.appendChild(setorCell);
-                
-                // Células de presença por data e turno (apenas turnos visíveis)
+
                 uniqueDates.forEach(date => {
                     turnosToShow.forEach(turno => {
                         const count = datesGrouped[date]?.[turno]?.[setor]?.size || 0;
                         const cell = document.createElement('td');
                         cell.className = count > 0 ? 'presente' : 'ausente';
-                        
+
                         if (count > 0) {
                             const checkIcon = document.createElement('span');
                             checkIcon.className = 'icone-check';
-                            checkIcon.innerHTML = '✓';
+                            checkIcon.innerHTML = '✔';
                             cell.textContent = '';
                             cell.appendChild(checkIcon);
                         } else {
                             const xIcon = document.createElement('span');
                             xIcon.className = 'icone-x';
-                            xIcon.innerHTML = '✗';
+                            xIcon.innerHTML = '✘';
                             cell.textContent = '';
                             cell.appendChild(xIcon);
                         }
-                        
+
                         row.appendChild(cell);
                     });
                 });
-                
-                // Cálculo das frequências (apenas para turnos visíveis)
+
                 const freqA = turnosToShow.includes('A') ? calculateFrequency(setorTurnoPresence[setor]?.A || {}, totalDates) : 0;
                 const freqB = turnosToShow.includes('B') ? calculateFrequency(setorTurnoPresence[setor]?.B || {}, totalDates) : 0;
-                
-                // Célula de frequência
+
                 const freqCell = document.createElement('td');
                 freqCell.className = 'percentage-cell';
-                
+
+                const percentageContainer = document.createElement('div');
+                percentageContainer.className = 'percentage-container';
+
                 if (turnosToShow.includes('A')) {
                     const divA = document.createElement('div');
                     divA.className = `percentage-row ${getPercentageClass(freqA)}`;
-                    divA.textContent = `A: ${freqA}%`;
-                    freqCell.appendChild(divA);
+                    divA.textContent = `A:${freqA}%`;
+                    percentageContainer.appendChild(divA);
                 }
-                
+
                 if (turnosToShow.includes('B')) {
                     const divB = document.createElement('div');
                     divB.className = `percentage-row ${getPercentageClass(freqB)}`;
-                    divB.textContent = `B: ${freqB}%`;
-                    freqCell.appendChild(divB);
+                    divB.textContent = `B:${freqB}%`;
+                    percentageContainer.appendChild(divB);
                 }
-                
+
+                freqCell.appendChild(percentageContainer);
                 row.appendChild(freqCell);
                 tbody.appendChild(row);
             });
-            
+
             table.appendChild(tbody);
             tableContainer.appendChild(table);
         }
@@ -907,6 +959,132 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadPresenceData();
         });
+
+        ///////////////////////////////////////////////////////////// PRESEÇA ////////////////////////////////////////////////////////////////////
+
+        // Função para formatar a data no formato dd/mm/yy
+  function formatDate(date) {
+            const day = ('0' + date.getDate()).slice(-2); // Adiciona 0 à esquerda se necessário
+            const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adiciona 0 à esquerda se necessário
+            const year = date.getFullYear().toString().slice(-2); // Extrai os dois últimos dígitos do ano
+            return `${day}/${month}/${year}`;
+        }
+
+        // Função para verificar o turno com base na hora atual
+        function getTurno() {
+            const currentHour = new Date().getHours(); // Obtém a hora atual
+
+            if (currentHour >= 5 && currentHour <= 15) {
+                return 'A'; // Turno A (05:00 até 9:00)
+            } else {
+                return 'B'; // Turno B (10:01 até 23:59)
+            }
+        }
+
+        // Função para obter os setores da API
+        async function getSetores() {
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbyLNpOLbelGdzTzZ7A8Ti3BmnDtzrJSYXdxbIlUDiOvcGjveM-pYm5bdl1WSvbQzqAXYg/exec');
+                const data = await response.json();
+                
+                console.log('Dados recebidos:', data); // Verifique os dados retornados pela API
+
+                // Verifique se a chave 'setores' existe e é um array
+                if (data && Array.isArray(data.setores)) {
+                    return data.setores; // Retorna os setores obtidos
+                } else {
+                    console.error('A chave "setores" não existe ou não é um array.');
+                    return [];
+                }
+            } catch (error) {
+                console.error('Erro ao buscar setores:', error);
+                return [];
+            }
+        }
+
+        // Função para buscar os dados de status da URL fornecida
+        async function getStatusData() {
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbx_RtEpbIql7RXEa-vyANKDChC0xANYdW7cNrQSqZfGKpPRJ_OmTaj2ieQtVBhlAkrX/exec');
+                const data = await response.json();
+
+                // Adicionando um log para visualizar a resposta da API
+                console.log('Resposta da API:', data);
+
+                const currentDate = formatDate(new Date()); // Data atual no formato dd/mm/yy
+                const selectedBrand = document.getElementById('brandFilter').value; // Marca selecionada no filtro
+                const currentTurno = getTurno(); // Obtém o turno atual (A ou B)
+                const setoresList = document.querySelectorAll('#setoresList li');
+
+                // Adicionando logs para depuração
+                console.log('Data atual:', currentDate);
+                console.log('Marca selecionada:', selectedBrand);
+                console.log('Turno atual:', currentTurno);
+                console.log('setoresList:', setoresList);
+
+                // Iterar sobre os dados de status e comparar com a data, setor, marca e turno
+                data.status.forEach((item) => {
+                    const itemDate = item['Data']; // Data
+                    const itemSetor = item['Setor']; // Setor
+                    const itemMarca = item['Marca']; // Marca
+                    const itemTurno = item['Turno']; // Turno (da coluna H)
+
+                    // Adicionando logs para depuração
+                    console.log('Comparando com:', itemDate, itemSetor, itemMarca, itemTurno);
+
+                    // Comparar a data, o setor, a marca e o turno
+                    setoresList.forEach((setorItem) => {
+                        const selectedSetor = setorItem.textContent.trim(); // Pega o nome do setor
+                        console.log('Verificando setor:', selectedSetor);
+                        
+                        if (itemDate === currentDate && selectedSetor === itemSetor && itemMarca === selectedBrand && itemTurno === currentTurno) {
+                            console.log('Setor pintado de verde:', itemSetor);
+                            setorItem.classList.add('setor-verde'); // Pinta o setor de verde
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Erro ao buscar dados de status:', error);
+            }
+        }
+
+        // Função para exibir os setores no Container 3
+        async function displaySetores() {
+            const setores = await getSetores();
+            
+            // Acessa o container de setores
+            const setoresList = document.getElementById('setoresList');
+            setoresList.innerHTML = ''; // Limpa a lista antes de adicionar os novos itens
+
+            // Verifica se existem setores
+            if (setores.length === 0) {
+                setoresList.innerHTML = '<li>Nenhum setor encontrado.</li>';
+            } else {
+                // Ignora a primeira linha (cabeçalho) se presente
+                const setoresSemCabecalho = setores.slice(1);
+
+                // Adiciona os setores na lista em duas colunas
+                setoresSemCabecalho.forEach(setor => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = setor; // Adiciona o nome do setor
+                    setoresList.appendChild(listItem);
+                });
+            }
+
+            // Chama a função para comparar e pintar os setores
+            getStatusData();
+        }
+
+        // Chama a função displaySetores quando a página for carregada
+        document.addEventListener('DOMContentLoaded', async () => {
+            await displaySetores();
+        });
+
+        // Atualiza a lista de setores quando o filtro de marca é alterado
+        document.getElementById('brandFilter').addEventListener('change', function() {
+            displaySetores(); // Atualiza a lista de setores
+        });
     </script>
 </body>
+
 </html>
