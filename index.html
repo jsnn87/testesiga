@@ -74,7 +74,8 @@
             display: block;
             flex-direction: column;
             align-items: center;
-            padding: 3%; /* Padding de 3% */
+            padding: 3%;
+            /* Padding de 3% */
         }
 
         .container4 {
@@ -328,7 +329,7 @@
             font-weight: bold;
             position: sticky;
             top: 0;
-            
+
         }
 
         .turno-header {
@@ -503,39 +504,97 @@
             font-weight: bold;
             font-size: 20px;
         }
-         /* Estilos para a lista de setores */
-         #setoresList {
+
+        /* Estilos para a lista de setores */
+        #setoresList {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            gap: 5px; /* Espaçamento entre os itens */
+            gap: 5px;
+            /* Espaçamento entre os itens */
             padding: 0;
             list-style: none;
             margin: 0;
         }
 
         #setoresList li {
-            width: calc(50% - 5px); /* Cada item ocupa 50% da largura, considerando o gap reduzido */
+            width: calc(50% - 5px);
+            /* Cada item ocupa 50% da largura, considerando o gap reduzido */
             background-color: #f2f2f2;
-            padding: 15px; /* Padding ajustado para 15px */
+            padding: 15px;
+            /* Padding ajustado para 15px */
             border-radius: 5px;
             text-align: left;
             box-sizing: border-box;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px; /* Tamanho da fonte ajustado para 14px */
-            word-wrap: break-word; /* Quebra de linha para textos longos */
-            white-space: normal; /* Garante que o texto quebre a linha corretamente */
+            font-size: 16px;
+            /* Tamanho da fonte ajustado para 14px */
+            word-wrap: break-word;
+            /* Quebra de linha para textos longos */
+            white-space: normal;
+            /* Garante que o texto quebre a linha corretamente */
             margin-left: 0;
-            margin-right: 0; /* Remove o espaço nas laterais */
-            font-weight: normal; /* Remove o negrito */
+            margin-right: 0;
+            /* Remove o espaço nas laterais */
+            font-weight: normal;
+            /* Remove o negrito */
         }
 
         /* Setor pintado de verde */
         .setor-verde {
-            background-color: #28a745 !important; /* Cor verde */
-            color: white; /* Cor do texto para contraste */
+            background-color: #28a745 !important;
+            /* Cor verde */
+            color: white;
+            /* Cor do texto para contraste */
+        }
+
+         /* Feedback visual */
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        .feedback.success {
+            background-color: #4CAF50;
+            /* Verde */
+            color: white;
+            /* Texto em branco */
+        }
+
+        .feedback.warning {
+            background-color: #FFC107;
+            /* Amarelo */
+            color: black;
+            /* Texto em preto */
+        }
+
+        .feedback.error {
+            background-color: #f44336;
+            /* Vermelho */
+            color: white;
+            /* Texto em branco */
+        }
+
+        .feedback.info {
+            background-color: #e90404;
+            /* Azul */
+            color: white;
+            /* Texto em branco */
         }
     </style>
 </head>
@@ -575,7 +634,7 @@
                         </div>
                         <div class="container container3">
                             <h2>Presença do dia</h2>
-                            <ul id="setoresList"></ul> 
+                            <ul id="setoresList"></ul>
                         </div>
                         <div class="container container4">
                             <h2>Apresentação do dia</h2>
@@ -634,13 +693,155 @@
             <h2>Ações</h2>
         </div>
     </section>
+    <!-- Feedback visual -->
+    <div id="feedback" class="feedback"></div>
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
 
     <script>
+        ///////////////////////////////////////////////////////////////////// Barcode ///////////////////////////////////////////////////////////////////////
+         // Inicia a captura do input do código de barras
+       document.addEventListener('DOMContentLoaded', function () {
+            const barcodeInput = document.querySelector('.barcode-field input[type="text"]');
+
+            barcodeInput.addEventListener('keypress', function (event) {
+                const barcodeValue = event.target.value;
+
+                // Verifica se a tecla pressionada foi 'Enter' (tecla que o leitor geralmente usa após o código de barras)
+                if (event.key === 'Enter' && barcodeValue) {
+                    console.log("Código de barras enviado para a API: ", barcodeValue);  // Log do valor enviado
+                    fetchDataAndSave(barcodeValue);  // Envia o código para a API
+                    barcodeInput.value = '';  // Limpa o campo de entrada após o envio
+                }
+            });
+            buscarEventoDoDia();
+        });
+
+        function handleApiResponse(data) {
+            if (data.status === 'error') {
+                let message = '';
+                let feedbackType = ''; // Inicializa o tipo de feedback
+
+                if (data.message === 'Gerenciamento diário Fechado') {
+                    message = 'Gerenciamento diário Fechado';
+                    feedbackType = 'info';  // Azul para "Gerenciamento diário Fechado"
+                } else if (data.message === 'Crachá não encontrado.') {
+                    message = 'Crachá não encontrado';
+                    feedbackType = 'warning'; // Amarelo para "Crachá não encontrado"
+                } else {
+                    message = 'Erro ao buscar dados';
+                    feedbackType = 'error'; // Vermelho para "Erro ao buscar dados"
+                }
+
+                showFeedback(message, feedbackType); // Exibe a mensagem com o tipo adequado
+            } else {
+                // Caso contrário, exibe a mensagem de sucesso com cor verde
+                showFeedback('Dados salvos com sucesso', 'success');
+            }
+        }
+
+        // Função para exibir feedback
+        function showFeedback(message, type) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+
+            // Remove as classes anteriores
+            feedback.classList.remove('success', 'warning', 'error', 'info');
+
+            // Adiciona a classe correspondente ao tipo de feedback
+            feedback.classList.add(type);
+
+            feedback.style.display = 'block';
+            feedback.style.opacity = '1';
+
+            // Limpa o input
+            document.getElementById('barcodeInput').value = '';
+
+            // Oculta o feedback após 5 segundos com efeito de fade out
+            setTimeout(() => {
+                feedback.style.opacity = '0';
+                setTimeout(() => {
+                    feedback.style.display = 'none';
+                }, 1000); // Tempo do fade out
+            }, 2000); // Tempo de exibição do feedback
+        }
+
+        // Função para buscar os dados na API usando o parâmetro "barcode"
+
+        function fetchDataAndSave(barcode) {
+            const url = `https://script.google.com/macros/s/AKfycbyrSe11utS7I9Y8NO_lhdaBF2Bi_5MWXjVfGPLvBl2vpziNz9I58A4ckzKVzccd6kmx/exec?barcode=${barcode}`;
+            console.log("Código de barras enviado para a API: ", barcode);  // Log do valor enviado
+
+            fetch(url)
+                .then(response => {
+                    console.log('Status da resposta da API: ', response.status); // Log do status da resposta
+                    if (!response.ok) {
+                        throw new Error('Erro na requisição: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Dados recebidos:', data);  // Log dos dados recebidos da API
+
+                    if (data.status === 'error') {
+                        // Chama a função para exibir feedback conforme o tipo de erro
+                        handleApiResponse(data);  // Exibe a mensagem adequada com base no status e mensagem de erro
+                    } else if (data.status === 'success' && data.data) {
+                        const fetchedCracha = data.data.cracha.toString().trim();
+                        const barcodeToCheck = barcode.trim();
+                        console.log("Cracha comparado: ", fetchedCracha, " Barcode recebido: ", barcodeToCheck);  // Log para ver os valores sendo comparados
+
+                        if (fetchedCracha === barcodeToCheck) {
+                            saveDataToSheet(data.data);  // Salva os dados e exibe a mensagem de sucesso
+                        } else {
+                            handleApiResponse({ status: 'error', message: 'Crachá não encontrado.' });  // Exibe a mensagem de erro se o código não for encontrado
+                            console.log("Código de barras não encontrado.");  // Log se não encontrar o código
+                        }
+                    } else {
+                        // Caso o status não seja 'success' ou o campo 'data' esteja vazio, trata como não encontrado
+                        handleApiResponse({ status: 'error', message: 'Crachá não encontrado.' });  // Exibe a mensagem de erro se não encontrar dados válidos
+                        console.log("Código de barras não encontrado, status ou data ausente.");  // Log de erro específico
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);  // Log de erro geral
+                    handleApiResponse({ status: 'error', message: 'Erro ao buscar dados.' });  // Exibe erro genérico ao buscar dados
+                });
+        }
+
+        // Função para salvar os dados na planilha "base_dados_status"
+        function saveDataToSheet(data) {
+            const urlPost = 'https://script.google.com/macros/s/AKfycbyrSe11utS7I9Y8NO_lhdaBF2Bi_5MWXjVfGPLvBl2vpziNz9I58A4ckzKVzccd6kmx/exec';
+            const postData = {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'saveStatus',
+                    dataAtual: new Date().toLocaleDateString('pt-BR'), // Data atual formatada como dd/mm/aa
+                    cracha: data.cracha,
+                    nome: data.Nome,
+                    celula: data.Célula,
+                    funcao: data.Função,
+                    setor: data.Setor,
+                    predio: data.Predio,
 
 
+                })
+            };
+            fetch(urlPost, postData)
+                .then(response => {
+                    console.log('Dados enviados para salvar.');
+                    // Exibe a mensagem de sucesso com o nome incluído
+                    showFeedback(`${data.Nome}`, 'success');
+                })
+                .catch(error => {
+                    console.error('Erro ao salvar dados:', error);
+                    showFeedback('Erro ao salvar dados.', 'error');
+                });
+        }
 
-
-/////////////////////////////////////////////////////////////////////// HISTORICO //////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////// HISTORICO //////////////////////////////////////////////////////////////////////////
         // Variáveis globais
         let allData2 = [];
         let currentMonthFilter = '';
@@ -969,7 +1170,7 @@
         ///////////////////////////////////////////////////////////// PRESEÇA ////////////////////////////////////////////////////////////////////
 
         // Função para formatar a data no formato dd/mm/yy
-  function formatDate(date) {
+        function formatDate(date) {
             const day = ('0' + date.getDate()).slice(-2); // Adiciona 0 à esquerda se necessário
             const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adiciona 0 à esquerda se necessário
             const year = date.getFullYear().toString().slice(-2); // Extrai os dois últimos dígitos do ano
@@ -992,7 +1193,7 @@
             try {
                 const response = await fetch('https://script.google.com/macros/s/AKfycbyLNpOLbelGdzTzZ7A8Ti3BmnDtzrJSYXdxbIlUDiOvcGjveM-pYm5bdl1WSvbQzqAXYg/exec');
                 const data = await response.json();
-                
+
                 console.log('Dados recebidos:', data); // Verifique os dados retornados pela API
 
                 // Verifique se a chave 'setores' existe e é um array
@@ -1042,7 +1243,7 @@
                     setoresList.forEach((setorItem) => {
                         const selectedSetor = setorItem.textContent.trim(); // Pega o nome do setor
                         console.log('Verificando setor:', selectedSetor);
-                        
+
                         if (itemDate === currentDate && selectedSetor === itemSetor && itemMarca === selectedBrand && itemTurno === currentTurno) {
                             console.log('Setor pintado de verde:', itemSetor);
                             setorItem.classList.add('setor-verde'); // Pinta o setor de verde
@@ -1057,7 +1258,7 @@
         // Função para exibir os setores no Container 3
         async function displaySetores() {
             const setores = await getSetores();
-            
+
             // Acessa o container de setores
             const setoresList = document.getElementById('setoresList');
             setoresList.innerHTML = ''; // Limpa a lista antes de adicionar os novos itens
@@ -1087,9 +1288,88 @@
         });
 
         // Atualiza a lista de setores quando o filtro de marca é alterado
-        document.getElementById('brandFilter').addEventListener('change', function() {
+        document.getElementById('brandFilter').addEventListener('change', function () {
             displaySetores(); // Atualiza a lista de setores
         });
+
+        
+        // Chama as funções quando a página carregar
+        window.onload = () => { 
+            fetchNames(); // Carrega os nomes da aba 'Calendário'
+            
+        };
+
+        ////////////////////////////////////////// Calendario do dia - Status/////////////////////////////////////////////////////////////
+
+        // Função para buscar o evento do dia na API de eventos
+        function buscarEventoDoDia() {
+            const dataAtual = new Date();
+            const dia = String(dataAtual.getDate()).padStart(2, '0');
+            const mesComZero = String(dataAtual.getMonth() + 1).padStart(2, '0');
+            const ano = dataAtual.getFullYear();
+            const dataFormatada = `${dia}/${mesComZero}/${ano}`;
+            // Mapeamento de eventos para cores
+            const coresEventos = {
+                "LEAN": "#FF8C00",
+                "QUALIDADE": "#00CC00",
+                "RH": "#FF0080",
+                "CRONO": "#BC8F8F",
+                "MANUTENÇÃO": "#f3d500",
+                "P5S": "#6959CD",
+                "LABORATÓRIO": "#006600",
+                "MODELAGEM": "#A0522D",
+                "SSMA": "#BA55D3",
+                "TO": "#1E90FF",
+                "PCP": "#FF0000",
+                "FERIADO": "#000000",
+                "-": "#ccc"  // Cor padrão caso não haja mapeamento
+            };
+
+            const url = 'https://script.google.com/macros/s/AKfycbz4dnhdAYGL_HdHMO9ypsvNR7LmGxplWuyxNGllpzyI3PjKSD3zsdQz5_4AS8SE0mbL/exec';
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na requisição: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Evento recebido:', data);
+                    if (data && typeof data === 'object') {
+                        const mesAtual = data[mesComZero] || data[String(dataAtual.getMonth() + 1)];
+                        if (mesAtual) {
+                            let eventoDoDia = null;
+                            Object.keys(mesAtual).forEach(semana => {
+                                const dias = mesAtual[semana].days;
+                                Object.keys(dias).forEach(diaKey => {
+                                    if (dias[diaKey] && dias[diaKey].date === dataFormatada) {
+                                        eventoDoDia = dias[diaKey].event;
+                                    }
+                                });
+                            });
+                            const elementoEvento = document.getElementById('eventoDoDia');
+                            const container4 = document.querySelector('.container4');
+                            if (eventoDoDia) {
+                                elementoEvento.textContent = eventoDoDia;
+                                const corEvento = coresEventos[eventoDoDia] || coresEventos["-"];
+                                container4.style.backgroundColor = corEvento;
+                            } else {
+                                elementoEvento.textContent = 'Nenhum evento.';
+                                container4.style.backgroundColor = coresEventos["-"];
+                            }
+                        } else {
+                            throw new Error('Mês atual não encontrado nos dados.');
+                        }
+                    } else {
+                        throw new Error('Formato de dados inválido.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar evento:', error);
+                    document.getElementById('eventoDoDia').textContent = 'Erro ao carregar';
+                    document.querySelector('.container4').style.backgroundColor = coresEventos["-"];
+                });
+        }
     </script>
 </body>
 
